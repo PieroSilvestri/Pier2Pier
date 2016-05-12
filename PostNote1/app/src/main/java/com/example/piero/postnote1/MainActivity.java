@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static List<PostItem> postList = new ArrayList<>();
+    public static List<PostItem> postList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PostAdapter mAdapter;
 
@@ -39,11 +39,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                PostItem post = new PostItem("Titolo 2", "Contenuto 2", 1);
+                postList.add(post);
+                AllFragment.UpdateList();
             }
         });
 
-
-
+        PostItem post = new PostItem("Titolo 1","Contenuto 1",1);
+        postList.add(post);
+        post = new PostItem("Titolo 2", "Contenuto 2", 1);
+        postList.add(post);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
