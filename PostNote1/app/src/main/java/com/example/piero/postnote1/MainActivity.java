@@ -17,16 +17,22 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String VALORENUOVO = "VALORENUOVO";
+    private static final String ID = "ID";
+    private static final String VALORE = "VALORE";
+    TextView text;
+    ArrayList<String> arrayMio = new ArrayList<>();
+    private int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        arrayMio.add(0, "CIAO");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +48,33 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Bundle datipassati = getIntent().getExtras();
+        String dato1 = "";
+        if(datipassati != null){
+            dato1 =  datipassati.getString(VALORENUOVO);
+            id = datipassati.getInt(ID);
+        }
+        else {
+            id = arrayMio.size();
+
+
+        }
+        if(arrayMio.size() != 0) {
+            if (arrayMio.get(id) != null) {
+                arrayMio.set(id, dato1);
+            } else {
+                arrayMio.add(id, dato1);
+            }
+        }
+
+        for(int i = 0; i < arrayMio.size(); i++){
+            Log.d("TAG", arrayMio.get(i).toString());
+        }
+
+        TextView text3 = (TextView)findViewById(R.id.textView3);
+
+        text3.setText(dato1);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -49,23 +82,28 @@ public class MainActivity extends AppCompatActivity
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dettaglio("Come stai?");
+                //modificare arrayMio con nome array di meligio
+                dettaglio("Come stai?", arrayMio.size());
             }
         });
 
-        final TextView text = (TextView)findViewById(R.id.textView3);
+        text = (TextView)findViewById(R.id.textView3);
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dettaglio((String) text.getText());
+                //sostituire 3 con posizione nell'array
+                dettaglio(text.getText().toString(), 3);
             }
         });
 
     }
 
-    public void dettaglio(String value){
+    public void dettaglio(String value, int id){
         Intent openPage1 = new Intent(MainActivity.this,Dettaglio.class);
-        openPage1.putExtra("VALORE", value);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ID, id);
+        bundle.putString(VALORE, value);
+        openPage1.putExtras(bundle);
         startActivity(openPage1);
     }
 
