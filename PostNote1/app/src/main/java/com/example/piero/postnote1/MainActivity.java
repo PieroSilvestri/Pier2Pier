@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+       PostItem post = new PostItem("test titolo","test contenuto",1);
+        movieList.add(post);
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
