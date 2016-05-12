@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,15 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AllFragment extends Fragment {
 
-    private List<PostItem> postList = new ArrayList<>();
+    private static List<PostItem> allList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private PostAdapter mAdapter;
-
+    private static PostAdapter mAdapter;
 
     public AllFragment() {
         // Required empty public constructor
@@ -47,7 +44,7 @@ public class AllFragment extends Fragment {
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
 
-        mAdapter = new PostAdapter(postList);
+        mAdapter = new PostAdapter(allList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -59,7 +56,7 @@ public class AllFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                PostItem item = postList.get(position);
+                PostItem item = allList.get(position);
                 Toast.makeText(getActivity(), item.getTitolo() + " is selected!", Toast.LENGTH_SHORT).show();
             }
 
@@ -69,12 +66,10 @@ public class AllFragment extends Fragment {
             }
         }));
 
-        PostItem post = new PostItem("Titolo 1","Contenuto 1",1);
-        postList.add(post);
-        post = new PostItem("Titolo 2", "Contenuto 2", 1);
-        postList.add(post);
-
         //return inflater.inflate(R.layout.fragment_all, container, false);
+
+        UpdateList();
+
         return rootView;
     }
 
@@ -125,6 +120,13 @@ public class AllFragment extends Fragment {
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
+    }
+
+    public static void UpdateList(){
+        //allList = null;
+        allList = new ArrayList<PostItem>(MainActivity.postList);
+        mAdapter.notifyDataSetChanged();
+        Log.d("Hey, listen", "" + allList.size());
     }
 
 }
