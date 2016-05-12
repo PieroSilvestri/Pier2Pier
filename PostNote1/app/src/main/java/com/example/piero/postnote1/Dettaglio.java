@@ -45,7 +45,6 @@ public class Dettaglio extends AppCompatActivity {
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mListener.update(new PostItem(text1.getText(), titolo.getText(), postItem.getId()), id);
 
                 //cambiaTesto(text1.getText().toString(), id);

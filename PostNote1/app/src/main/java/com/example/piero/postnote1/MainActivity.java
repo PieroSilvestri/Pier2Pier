@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dettaglio("Come stai?", arrayMio.size());
                 //dettaglio nuovo
                 // dettaglio(new PostItem(null, null, arrayMio.size()));
+                startActivity(new Intent(new PostItem(), -1));
 
             }
         });
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sostituire 3 con posizione nell'array
+                //sostituire 0 con posizione nell'array
                 dettaglio(text.getText().toString(), 0);
             }
         });
@@ -150,12 +151,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void update(PostItem post, int id) {
         if(arrayMio.isEmpty())
-            arrayMio.add(id, post);
+            arrayMio.add(0, post);
         else {
             if (arrayMio.get(id) != null)
                 arrayMio.set(id, post);
-            else
+            else {
+                if (id < 0)
+                    id = arrayMio.size();
+                
                 arrayMio.add(id, post);
+            }
         }
 
     }
