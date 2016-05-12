@@ -11,30 +11,44 @@ import android.widget.TextView;
 public class Dettaglio extends AppCompatActivity {
 
     private EditText text1;
+    private EditText titolo;
     private int id;
+    private PostItem postItem;
+    public interface IOChangeList{
+        void update(PostItem post, int id);
+    }
+
+    private IOChangeList mListener = new IOChangeList() {
+        @Override
+        public void update(PostItem post, int id) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
 
-        Bundle datipassati = getIntent().getExtras();
-        String dato1 =  datipassati.getString("VALORE");
-        id = datipassati.getInt("ID");
 
 
-
-        TextView text = (TextView)findViewById(R.id.textView2);
-        text.setText(dato1);
-
-         text1 = (EditText)findViewById(R.id.editText);
-        text1.setText(dato1 + " 100 ");
+        if(getIntent().getSerializableExtra("MyPost") != null) {
+            postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
+            id = getIntent().getExtras().getInt("ID");
+        }
+        titolo = (EditText)findViewById(R.id.postTitle);
+        titolo.setText(postItem.getTitolo());
+        text1 = (EditText)findViewById(R.id.editText);
+        text1.setText(postItem.getTesto);
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cambiaTesto(text1.getText().toString(), id);
+
+                mListener.update(new PostItem(text1.getText(), titolo.getText(), postItem.getId()), id);
+
+                //cambiaTesto(text1.getText().toString(), id);
             }
         });
     }

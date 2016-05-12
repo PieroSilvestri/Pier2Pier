@@ -3,26 +3,26 @@ package com.example.piero.postnote1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
     private static final String VALORENUOVO = "VALORENUOVO";
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
+    private static final String TITLE = "TITLE";
     TextView text;
     ArrayList<String> arrayMio = new ArrayList<>();
     private int id;
@@ -48,32 +48,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        Bundle datipassati = getIntent().getExtras();
-        String dato1 = "";
-        if(datipassati != null){
-            dato1 =  datipassati.getString(VALORENUOVO);
-            id = datipassati.getInt(ID);
-        }
-        else {
-            id = arrayMio.size();
-
-
-        }
-        if(arrayMio.size() != 0) {
-            if (arrayMio.get(id) != null) {
-                arrayMio.set(id, dato1);
-            } else {
-                arrayMio.add(id, dato1);
-            }
-        }
 
         for(int i = 0; i < arrayMio.size(); i++){
             Log.d("TAG", arrayMio.get(i).toString());
         }
 
-        TextView text3 = (TextView)findViewById(R.id.textView3);
-
-        text3.setText(dato1);
+//        TextView text3 = (TextView)findViewById(R.id.textView3);
+//        text3.setText(dato1);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -84,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 //modificare arrayMio con nome array di meligio
                 dettaglio("Come stai?", arrayMio.size());
+                //dettaglio nuovo
+                // dettaglio(new PostItem(null, null, arrayMio.size()));
+
             }
         });
 
@@ -92,12 +76,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //sostituire 3 con posizione nell'array
-                dettaglio(text.getText().toString(), 3);
+                dettaglio(text.getText().toString(), 0);
             }
         });
 
     }
-
     public void dettaglio(String value, int id){
         Intent openPage1 = new Intent(MainActivity.this,Dettaglio.class);
         Bundle bundle = new Bundle();
@@ -162,5 +145,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void update(PostItem post, int id) {
+        if(arrayMio.isEmpty())
+            arrayMio.add(id, post);
+        else {
+            if (arrayMio.get(id) != null)
+                arrayMio.set(id, post);
+            else
+                arrayMio.add(id, post);
+        }
+
     }
 }
