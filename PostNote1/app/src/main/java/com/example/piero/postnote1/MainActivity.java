@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +53,14 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        
+        final TextView text = (TextView)findViewById(R.id.textView3);
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dettaglio((String) text.getText());
+            }
+        });
+
     }
 
     public void dettaglio(String value){

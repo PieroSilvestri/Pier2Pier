@@ -2,6 +2,7 @@ package com.example.piero.postnote1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class Dettaglio extends AppCompatActivity {
@@ -16,6 +17,9 @@ public class Dettaglio extends AppCompatActivity {
 
         TextView text = (TextView)findViewById(R.id.textView2);
         text.setText(dato1);
+
+        EditText text1 = (EditText)findViewById(R.id.editText);
+        text1.setText(dato1 + " 100 ");
 
     }
 }
