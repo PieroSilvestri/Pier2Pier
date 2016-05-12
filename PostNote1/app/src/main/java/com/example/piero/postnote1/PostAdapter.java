@@ -8,10 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Adriano on 12/05/2016.
- */
-public class PostAdapter {
+
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     private List<PostItem> postList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

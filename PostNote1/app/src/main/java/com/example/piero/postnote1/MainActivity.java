@@ -1,8 +1,11 @@
 package com.example.piero.postnote1;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,7 +22,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<PostItem> movieList = new ArrayList<>();
+    private static List<PostItem> postList = new ArrayList<>();
     private RecyclerView recyclerView;
     private PostAdapter mAdapter;
 
@@ -39,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-       PostItem post = new PostItem("test titolo","test contenuto",1);
-        movieList.add(post);
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -51,6 +53,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        AllFragment fragment = new AllFragment();
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
