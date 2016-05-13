@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Dettaglio"></activity>
+
     </application>
 
 </manifest>

@@ -2,15 +2,15 @@ package com.example.piero.postnote1;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import java.io.Serializable;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -41,26 +41,31 @@ public class Dettaglio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
 
-        setTitle("Pagina di dettaglio");
+        setTitle("Aggiungi nota");
 
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
+        }else {
+            postItem = new PostItem();
+            postItem.setId(100);
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
         }
         titolo = (EditText)findViewById(R.id.postTitle);
-        titolo.setText(postItem.getTitolo());
+        titolo.setText("" + postItem.getTitolo());
         text1 = (EditText)findViewById(R.id.editText);
-        text1.setText(postItem.getTesto());
+        text1.setText("" + postItem.getTesto().toString());
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
+        btnLetter.setClickable(true);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.update(new PostItem(text1.getText(), titolo.getText(), postItem.getId()), id);
+                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()), id);
+
 
                 //cambiaTesto(text1.getText().toString(), id);
             }
@@ -130,7 +135,7 @@ public class Dettaglio extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(POST, (PostItem)postItem);
+        outState.putSerializable(POST, (Serializable) postItem);
         outState.putInt(ID, id);
 
     }

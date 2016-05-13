@@ -1,8 +1,20 @@
 package com.example.piero.postnote1;
 
+import android.support.v7.app.AppCompatActivity;
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +25,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+
+
+
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,24 +47,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private static final String TITLE = "TITLE";
+    private ArrayList<PostItem> postList = new ArrayList<PostItem>();
+    public static PostAdapter mAdapter;
     TextView text;
-    ArrayList<String> arrayMio = new ArrayList<>();
+    ArrayList<PostItem> arrayMio = new ArrayList<>();
     private int id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        arrayMio.add(0, "CIAO");
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+       // arrayMio.add(0, "CIAO");
+
+
+//        PostItem post = new PostItem("Titolo 1","Contenuto 1",1);
+//        postList.add(post);
+//        post = new PostItem("Titolo 2", "Contenuto 2", 1);
+//        postList.add(post);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -59,6 +84,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        final Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("postList", postList);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        AllFragment fragment = new AllFragment();
+        fragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.commit();
+
+
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dettaglio("Come stai?", arrayMio.size());
                 //dettaglio nuovo
                 // dettaglio(new PostItem(null, null, arrayMio.size()));
-                startActivity(new Intent(new PostItem(), -1));
+                Intent i = new Intent(MainActivity.this, Dettaglio.class);
+                Bundle bundle1 = new Bundle();
+                PostItem post = new PostItem();
+                bundle.putSerializable("POST", (PostItem) post);
+                bundle.putInt("ID", -1);
+                startActivity(i.putExtras(bundle1));
 
             }
         });
@@ -89,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bundle.putString(VALORE, value);
         openPage1.putExtras(bundle);
         startActivity(openPage1);
+
     }
 
     @Override
@@ -100,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     public void update(PostItem post, int id) {
