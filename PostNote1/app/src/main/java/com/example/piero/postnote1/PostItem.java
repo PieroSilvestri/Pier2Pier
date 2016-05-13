@@ -2,13 +2,21 @@ package com.example.piero.postnote1;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Editable;
 
-public class PostItem implements Parcelable{
+import java.io.Serializable;
+
+public class PostItem implements Parcelable, Serializable {
     private String titolo,testo;
     private int id, secondi;
 
     public PostItem() {
 
+    }
+    public PostItem(String titolo, String testo, int id) {
+        this.titolo = titolo;
+        this.testo = testo;
+        this.id = id;
     }
 
     public PostItem(String titolo, String testo, int secondi, int id) {
@@ -16,6 +24,9 @@ public class PostItem implements Parcelable{
         this.titolo = titolo;
         this.testo = testo;
         this.id = id;
+    }
+
+    public PostItem(Editable text, Editable text1, int id) {
     }
 
     public int getSecondi() {return secondi;}
