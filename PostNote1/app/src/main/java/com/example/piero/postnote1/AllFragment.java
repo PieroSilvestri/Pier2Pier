@@ -31,18 +31,12 @@ public class AllFragment extends Fragment {
     }
 
     private static final String TAG = "RecyclerViewFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-         //Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
-
-        //ArrayList<PostItem> allList = new ArrayList<PostItem>();
 
         allList = getArguments().getParcelableArrayList("postList");
 
@@ -54,12 +48,10 @@ public class AllFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setStackFromEnd(true);
         //mLayoutManager.scrollToPosition(allList.size()-1);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        //recyclerView.scrollToPosition(0);
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
@@ -74,8 +66,6 @@ public class AllFragment extends Fragment {
 
             }
         }));
-
-        //return inflater.inflate(R.layout.fragment_all, container, false);
 
         return rootView;
     }
