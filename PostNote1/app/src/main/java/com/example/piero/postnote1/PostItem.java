@@ -11,7 +11,8 @@ public class PostItem implements Parcelable, Serializable {
     private int id, secondi;
 
     public PostItem() {
-
+        this.titolo = "";
+        this.testo = "";
     }
     public PostItem(String titolo, String testo, int id) {
         this.titolo = titolo;
