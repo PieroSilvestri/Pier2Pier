@@ -1,15 +1,20 @@
 package com.example.piero.postnote1;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class Dettaglio extends AppCompatActivity {
-
+    private static final String POST = "POST";
+    private static final String ID = "ID";
     private EditText text1;
     private EditText titolo;
     private int id;
@@ -26,12 +31,20 @@ public class Dettaglio extends AppCompatActivity {
     };
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mYdialog("Sicuro di voler uscire?");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
 
-
-
+        if(savedInstanceState != null) {
+            postItem = (PostItem) savedInstanceState.getSerializable(POST);
+            id = savedInstanceState.getInt(ID);
+        }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
@@ -39,7 +52,7 @@ public class Dettaglio extends AppCompatActivity {
         titolo = (EditText)findViewById(R.id.postTitle);
         titolo.setText(postItem.getTitolo());
         text1 = (EditText)findViewById(R.id.editText);
-        text1.setText(postItem.getTesto);
+        text1.setText(postItem.getTesto());
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
         btnLetter.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +63,74 @@ public class Dettaglio extends AppCompatActivity {
                 //cambiaTesto(text1.getText().toString(), id);
             }
         });
+
+        Button delete = (Button)findViewById(R.id.detailDelete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button annulla = (Button) findViewById(R.id.detailAnnulla);
+        annulla.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mYdialog("Sicuro di voler annullare?");
+            }
+        });
+    }
+
+    private void mYdialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+        builder.setMessage(message)
+                .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        builder.create();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(POST, (PostItem)postItem);
+        outState.putInt(ID, id);
+
     }
 
     public void cambiaTesto(String value, int id){
