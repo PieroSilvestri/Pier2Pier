@@ -2,6 +2,7 @@ package com.example.piero.postnote1;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Movie;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -58,7 +59,11 @@ public class AllFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 PostItem item = allList.get(position);
-                Toast.makeText(getActivity(), item.getTitolo() + " is selected!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), Dettaglio.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("MyPost", item);
+                bundle.putInt("ID", position);
+                startActivity(i.putExtras(bundle));
             }
 
             @Override
@@ -120,14 +125,6 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
-
-        for (int i=0;i<allList.size();i++){
-            switch (allList.get(i).getSecondi()){
-                case 1: Log.d("Secondo unooo", "uno");
-                    break;
-                case 30: Log.d("Secondo trenta", "30");
-            }
-        }
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }

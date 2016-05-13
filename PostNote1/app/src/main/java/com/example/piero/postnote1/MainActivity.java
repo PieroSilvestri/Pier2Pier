@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else {
                 if (id < 0)
                     id = postList.size();
-
                 postList.add(id, post);
             }
         }

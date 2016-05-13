@@ -43,6 +43,8 @@ public class Dettaglio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
 
+        id = -1;
+
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
@@ -51,10 +53,18 @@ public class Dettaglio extends AppCompatActivity {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
         }
+
         titolo = (EditText)findViewById(R.id.postTitle);
-        titolo.setText("Ciao");
         text1 = (EditText)findViewById(R.id.editText);
-        text1.setText("" + postItem.getTesto().toString());
+
+        if(postItem == null){
+            titolo.setHint("Inserisci qua il titolo");
+            text1.setHint("Inserisci qua il contenuto");
+        } else {
+            titolo.setText("" + postItem.getTitolo());
+            text1.setText("" + postItem.getTesto());
+        }
+
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
         btnLetter.setOnClickListener(new View.OnClickListener() {

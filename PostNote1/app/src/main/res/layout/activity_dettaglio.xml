@@ -27,28 +27,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/fab2"
         android:layout_alignEnd="@+id/fab2"
-        android:layout_above="@+id/fab2"
-        android:layout_below="@+id/textView4" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_done_all_black_48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        app:backgroundTint="#0deb24" />
+        android:layout_above="@+id/fab2" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Titolo Nota"
         android:id="@+id/postTitle"
         android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -58,9 +46,7 @@
         android:layout_below="@+id/postTitle"
         android:layout_alignRight="@+id/textView2"
         android:layout_alignEnd="@+id/textView2"
-        android:layout_marginRight="66dp"
-        android:layout_marginEnd="66dp"
-        android:layout_marginTop="81dp" />
+         />
 
     <Button
         android:layout_width="wrap_content"
@@ -71,4 +57,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="63dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_done_all_black_48dp"
+        app:backgroundTint="#0deb24"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/postTitle"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentLeft="false" />
 </RelativeLayout>
