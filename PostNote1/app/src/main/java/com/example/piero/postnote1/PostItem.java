@@ -8,11 +8,10 @@ import java.io.Serializable;
 
 public class PostItem implements Parcelable, Serializable {
     private String titolo,testo;
-    private int id, secondi;
+    private int id;
 
     public PostItem() {
-        this.titolo = "";
-        this.testo = "";
+
     }
     public PostItem(String titolo, String testo, int id) {
         this.titolo = titolo;
@@ -21,7 +20,6 @@ public class PostItem implements Parcelable, Serializable {
     }
 
     public PostItem(String titolo, String testo, int secondi, int id) {
-        this.secondi = secondi;
         this.titolo = titolo;
         this.testo = testo;
         this.id = id;
@@ -29,8 +27,6 @@ public class PostItem implements Parcelable, Serializable {
 
     public PostItem(Editable text, Editable text1, int id) {
     }
-
-    public int getSecondi() {return secondi;}
 
     public int getId() {
         return id;

@@ -1,10 +1,11 @@
 package com.example.piero.postnote1;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Movie;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class AllFragment extends Fragment {
@@ -30,18 +32,12 @@ public class AllFragment extends Fragment {
     }
 
     private static final String TAG = "RecyclerViewFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-         //Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
-
-        //ArrayList<PostItem> allList = new ArrayList<PostItem>();
 
         allList = getArguments().getParcelableArrayList("postList");
 
@@ -53,19 +49,16 @@ public class AllFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setStackFromEnd(true);
         //mLayoutManager.scrollToPosition(allList.size()-1);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        //recyclerView.scrollToPosition(0);
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 PostItem item = allList.get(position);
-                Toast.makeText(getActivity(), item.getTitolo() + " is selected!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
@@ -78,8 +71,6 @@ public class AllFragment extends Fragment {
 
             }
         }));
-
-        //return inflater.inflate(R.layout.fragment_all, container, false);
 
         return rootView;
     }
@@ -134,14 +125,6 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
-
-        for (int i=0;i<allList.size();i++){
-            switch (allList.get(i).getSecondi()){
-                case 1: Log.d("Secondo unooo", "uno");
-                    break;
-                case 30: Log.d("Secondo trenta", "30");
-            }
-        }
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }
