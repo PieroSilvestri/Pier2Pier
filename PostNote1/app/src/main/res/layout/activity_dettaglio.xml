@@ -9,15 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.piero.postnote1.Dettaglio">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Pagina dettaglio"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +36,5 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Titolo Nota"
         android:id="@+id/postTitle"
-        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

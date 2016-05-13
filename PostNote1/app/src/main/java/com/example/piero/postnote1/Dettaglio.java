@@ -41,6 +41,8 @@ public class Dettaglio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
 
+        setTitle("Pagina di dettaglio");
+
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
