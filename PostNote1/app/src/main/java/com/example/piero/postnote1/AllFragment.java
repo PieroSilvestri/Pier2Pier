@@ -22,9 +22,9 @@ import java.util.List;
 
 public class AllFragment extends Fragment {
 
-    private static List<PostItem> allList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private static PostAdapter mAdapter;
+    private static ArrayList<PostItem> allList = new ArrayList<>();
+    private static RecyclerView recyclerView;
+    public static PostAdapter mAdapter;
 
     public AllFragment() {
         // Required empty public constructor
@@ -42,16 +42,25 @@ public class AllFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
+        //ArrayList<PostItem> allList = new ArrayList<PostItem>();
+
+        allList = getArguments().getParcelableArrayList("postList");
+
+        Log.d("Hey, listen", "" + allList);
+
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
 
         mAdapter = new PostAdapter(allList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setStackFromEnd(true);
+        //mLayoutManager.scrollToPosition(allList.size()-1);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        //recyclerView.scrollToPosition(0);
         recyclerView.setAdapter(mAdapter);
-
-
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
@@ -67,8 +76,6 @@ public class AllFragment extends Fragment {
         }));
 
         //return inflater.inflate(R.layout.fragment_all, container, false);
-
-        UpdateList();
 
         return rootView;
     }
@@ -122,11 +129,17 @@ public class AllFragment extends Fragment {
         }
     }
 
-    public static void UpdateList(){
-        //allList = null;
-        allList = new ArrayList<PostItem>(MainActivity.postList);
+    public static void UpdateList() {
+
+        for (int i=0;i<allList.size();i++){
+            switch (allList.get(i).getSecondi()){
+                case 1: Log.d("Secondo unooo", "uno");
+                    break;
+                case 30: Log.d("Secondo trenta", "30");
+            }
+        }
+        recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
-        Log.d("Hey, listen", "" + allList.size());
     }
 
 }

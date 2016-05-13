@@ -37,7 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     public void onBindViewHolder(MyViewHolder holder, int position) {
         PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
-        holder.testo.setText(post.getTesto());
+        holder.testo.setText("" + post.getSecondi());
         //holder.data.setText(post.getYear());
     }
 
