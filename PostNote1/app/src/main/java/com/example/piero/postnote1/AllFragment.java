@@ -1,10 +1,10 @@
 package com.example.piero.postnote1;
 
 
-import android.content.Context;
-import android.graphics.Movie;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AllFragment extends Fragment {
@@ -67,6 +66,11 @@ public class AllFragment extends Fragment {
             public void onClick(View view, int position) {
                 PostItem item = allList.get(position);
                 Toast.makeText(getActivity(), item.getTitolo() + " is selected!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), Dettaglio.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("MyPost", item);
+                bundle.putInt("ID", position);
+                startActivity(i.putExtras(bundle));
             }
 
             @Override
