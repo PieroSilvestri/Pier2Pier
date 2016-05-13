@@ -1,21 +1,24 @@
 package com.example.piero.postnote1;
 
-/**
- * Created by Adriano on 12/05/2016.
- */
-public class PostItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PostItem implements Parcelable{
     private String titolo,testo;
-    private int id;
+    private int id, secondi;
 
     public PostItem() {
 
     }
 
-    public PostItem(String titolo, String testo, int id) {
+    public PostItem(String titolo, String testo, int secondi, int id) {
+        this.secondi = secondi;
         this.titolo = titolo;
         this.testo = testo;
         this.id = id;
     }
+
+    public int getSecondi() {return secondi;}
 
     public int getId() {
         return id;
@@ -40,4 +43,37 @@ public class PostItem {
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }
+
+    public PostItem(Parcel in) {
+        super();
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator<PostItem> CREATOR = new Parcelable.Creator<PostItem>() {
+        public PostItem createFromParcel(Parcel in) {
+            return new PostItem(in);
+        }
+
+        public PostItem[] newArray(int size) {
+
+            return new PostItem[size];
+        }
+
+    };
+
+    public void readFromParcel(Parcel in) {
+        testo = in.readString();
+        titolo = in.readString();
+        id = in.readInt();
+    }
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(testo);
+        dest.writeString(titolo);
+        dest.writeInt(id);
+    }
+
 }
