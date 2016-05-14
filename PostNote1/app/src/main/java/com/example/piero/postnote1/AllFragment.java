@@ -48,11 +48,12 @@ public class AllFragment extends Fragment {
         mAdapter = new PostAdapter(allList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setStackFromEnd(true);
-        //mLayoutManager.scrollToPosition(allList.size()-1);
+        //mLayoutManager.scrollToPosition(allList.size());
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.getLayoutManager().scrollToPosition(0);
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
@@ -125,7 +126,7 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
-        recyclerView.scrollToPosition(allList.size()-1);
+        recyclerView.scrollToPosition(allList.size() - 1);
         mAdapter.notifyDataSetChanged();
     }
 
