@@ -17,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
     private static final String ID = "ID";
@@ -61,7 +64,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String formattedDate = df.format(c.getTime());
 
+        for(int i = 0; i<30;i++){
+            PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
+            postList.add(post);
+        }
+        
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +80,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dettaglio("Come stai?", postList.size());
             }
         });
-
     }
     public void dettaglio(String value, int id){
         Intent openPage1 = new Intent(MainActivity.this,Dettaglio.class);
         Bundle bundle = new Bundle();
+
         bundle.putInt(ID, id);
         bundle.putString(VALORE, value);
         openPage1.putExtras(bundle);

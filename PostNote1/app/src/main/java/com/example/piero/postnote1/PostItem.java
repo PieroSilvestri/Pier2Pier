@@ -7,21 +7,16 @@ import android.text.Editable;
 import java.io.Serializable;
 
 public class PostItem implements Parcelable, Serializable {
-    private String titolo,testo;
+    private String titolo,testo, creationDate;
     private int id;
 
     public PostItem() {
 
     }
-    public PostItem(String titolo, String testo, int id) {
+    public PostItem(String titolo, String testo, String creationDate, int id) {
         this.titolo = titolo;
         this.testo = testo;
-        this.id = id;
-    }
-
-    public PostItem(String titolo, String testo, int secondi, int id) {
-        this.titolo = titolo;
-        this.testo = testo;
+        this.creationDate = creationDate;
         this.id = id;
     }
 
@@ -31,6 +26,8 @@ public class PostItem implements Parcelable, Serializable {
     public int getId() {
         return id;
     }
+
+    public String getcreationDate() {return creationDate;};
 
     public void setId(int id) {
         this.id = id;
@@ -72,6 +69,7 @@ public class PostItem implements Parcelable, Serializable {
     public void readFromParcel(Parcel in) {
         testo = in.readString();
         titolo = in.readString();
+        creationDate = in.readString();
         id = in.readInt();
     }
     public int describeContents() {
@@ -81,6 +79,7 @@ public class PostItem implements Parcelable, Serializable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(testo);
         dest.writeString(titolo);
+        dest.writeString(creationDate);
         dest.writeInt(id);
     }
 
