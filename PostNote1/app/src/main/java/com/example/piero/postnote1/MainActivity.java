@@ -40,16 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-//        for(int i = 0; i < postList.size(); i++){
-//            Log.d("TAG", postList.get(i).toString());
-//        }
-
-        for(int i = 30; i > 0; i--){
-            PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
-            postList.add(post);
-        }
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
