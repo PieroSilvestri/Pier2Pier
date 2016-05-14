@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            Log.d("TAG", postList.get(i).toString());
 //        }
 
-        for(int i = 0; i<30;i++){
+        for(int i = 30; i > 0; i--){
             PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
             postList.add(post);
         }
