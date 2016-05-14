@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,19 +28,51 @@ public class AllFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static AllFragment getIstance(){
+        return new AllFragment();
+    }
+
+
     private static final String TAG = "RecyclerViewFragment";
-    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
+        PostItem post = (PostItem)bundle.getSerializable("POST");
+        int id = bundle.getInt("ID");
+        if(resultCode == -1){
+            Log.d("MAIN" , " " +id );
+            Log.d("PRIMA ", allList.toString());
+            addToList(post, id);
+            Log.d("Dopo ", allList.toString());
+            Log.d("MAIN", " " + id);
+            UpdateList();
+        }
+
+    }
+
+    public void addToList(PostItem postItem, int position){
+
+        if(!allList.isEmpty()){
+            if(position < allList.size()){
+                allList.set(position, postItem);
+                Log.d("set ", allList.get(position).toString());
+            }else {
+                allList.add(postItem);
+                Log.d("set ", allList.get(position).toString());
+            }
+        }else {
+            allList.add(postItem);
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-         //Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
-
-        //ArrayList<PostItem> allList = new ArrayList<PostItem>();
 
         allList = getArguments().getParcelableArrayList("postList");
 
@@ -53,24 +84,23 @@ public class AllFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setStackFromEnd(true);
         //mLayoutManager.scrollToPosition(allList.size()-1);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        //recyclerView.scrollToPosition(0);
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                Log.d("TAG", "" + position);
                 PostItem item = allList.get(position);
-                Toast.makeText(getActivity(), item.getTitolo() + " is selected!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
                 bundle.putInt("ID", position);
-                startActivity(i.putExtras(bundle));
+                //startActivity(i.putExtras(bundle));
+                startActivityForResult(i.putExtras(bundle), 10);
             }
 
             @Override
@@ -78,8 +108,6 @@ public class AllFragment extends Fragment {
 
             }
         }));
-
-        //return inflater.inflate(R.layout.fragment_all, container, false);
 
         return rootView;
     }
@@ -134,14 +162,6 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
-
-        for (int i=0;i<allList.size();i++){
-            switch (allList.get(i).getSecondi()){
-                case 1: Log.d("Secondo unooo", "uno");
-                    break;
-                case 30: Log.d("Secondo trenta", "30");
-            }
-        }
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }

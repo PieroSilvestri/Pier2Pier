@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,7 @@ public class Dettaglio extends AppCompatActivity {
     private static final String ID = "ID";
     private EditText text1;
     private EditText titolo;
-    private int id;
+    private int id = -1;
     private PostItem postItem;
     public interface IOChangeList{
         void update(PostItem post, int id);
@@ -26,55 +27,74 @@ public class Dettaglio extends AppCompatActivity {
     private IOChangeList mListener = new IOChangeList() {
         @Override
         public void update(PostItem post, int id) {
-
         }
+
+
     };
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mYdialog("Sicuro di voler uscire?");
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
+        setTitle("La mia nota");
 
-        setTitle("Aggiungi nota");
 
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-        }else {
-            postItem = new PostItem();
-            postItem.setId(100);
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
         }
+
         titolo = (EditText)findViewById(R.id.postTitle);
-        titolo.setText("" + postItem.getTitolo());
         text1 = (EditText)findViewById(R.id.editText);
-        text1.setText("" + postItem.getTesto().toString());
+
+        if(postItem == null){
+            titolo.setHint("Inserisci qua il titolo");
+            text1.setHint("Inserisci qua il contenuto");
+        } else {
+            titolo.setText("" + postItem.getTitolo());
+            text1.setText("" + postItem.getTesto());
+        }
+
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
-        btnLetter.setClickable(true);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()), id);
-
+                Log.d("Detail + ", "" + id);
+                Intent intent = new Intent(Dettaglio.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()));
+                bundle.putInt(ID, id);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                finish();
 
                 //cambiaTesto(text1.getText().toString(), id);
             }
         });
 
         Button delete = (Button)findViewById(R.id.detailDelete);
+        if(id != -1)
+            delete.setClickable(false);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //passare id ad una interfaccia
+                /**
+                 * mListener.delete(id);
+                 *
+                 */
 
             }
         });
@@ -83,11 +103,14 @@ public class Dettaglio extends AppCompatActivity {
         annulla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mYdialog("Sicuro di voler annullare?");
+                onBackPressed();
             }
         });
     }
-
+    /*
+    * @String message
+    * Questo metodo permette di  annullare o tornare indietro durante la detail activity
+    * */
     private void mYdialog(String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
 
@@ -95,7 +118,7 @@ public class Dettaglio extends AppCompatActivity {
                 .setPositiveButton("SI", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
+                        Dettaglio.super.onBackPressed();
                     }
                 })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
