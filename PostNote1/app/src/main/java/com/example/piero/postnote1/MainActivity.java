@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat df  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String formattedDate = df.format(c.getTime());
 
-        for(int i = 0; i<30;i++){
+        for(int i = 30; i > 0; i--){
             PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
             postList.add(post);
         }
