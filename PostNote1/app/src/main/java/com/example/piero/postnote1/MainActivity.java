@@ -25,7 +25,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
-    private ArrayList<PostItem> postList = new ArrayList<PostItem>();
+    public static ArrayList<PostItem> postList = new ArrayList<PostItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat df  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String formattedDate = df.format(c.getTime());
 
-        for(int i = 30; i > 0; i--){
+        for(int i=0; i<30; i++){
             PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
             postList.add(post);
         }
@@ -67,7 +67,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dettaglio("Come stai?", postList.size());
+                //dettaglio("Come stai?", postList.size());
+                PostItem post = new PostItem("New", "nuova", "wewe", 2);
+                postList.add(post);
+                AllFragment.UpdateList();
             }
         });
     }
