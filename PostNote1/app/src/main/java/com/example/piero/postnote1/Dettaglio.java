@@ -42,9 +42,6 @@ public class Dettaglio extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
-        setTitle("La mia nota");
-
-
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
@@ -53,6 +50,8 @@ public class Dettaglio extends AppCompatActivity {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
         }
+
+
 
         titolo = (EditText)findViewById(R.id.postTitle);
         text1 = (EditText)findViewById(R.id.editText);
@@ -64,7 +63,7 @@ public class Dettaglio extends AppCompatActivity {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
         }
-
+        setTitle("" + titolo.getText());
 
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
         btnLetter.setOnClickListener(new View.OnClickListener() {
@@ -83,19 +82,17 @@ public class Dettaglio extends AppCompatActivity {
                 //cambiaTesto(text1.getText().toString(), id);
             }
         });
-
-        Button delete = (Button)findViewById(R.id.detailDelete);
-        if(id != -1)
-            delete.setClickable(false);
+        Button delete;
+        delete = (Button)findViewById(R.id.detailDelete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //passare id ad una interfaccia
-                /**
-                 * mListener.delete(id);
-                 *
-                 */
-
+                Log.d("delete", "delete");
+                Intent i = new Intent(Dettaglio.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("ID", id);
+                setResult(99, i.putExtras(bundle));
+                finish();
             }
         });
 
@@ -103,7 +100,9 @@ public class Dettaglio extends AppCompatActivity {
         annulla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Log.d("annulla", "annulla");
+                setResult(0, new Intent(Dettaglio.this, MainActivity.class));
+                finish();
             }
         });
     }

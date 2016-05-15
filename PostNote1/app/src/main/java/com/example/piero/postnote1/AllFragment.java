@@ -39,9 +39,9 @@ public class AllFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getExtras();
-        PostItem post = (PostItem)bundle.getSerializable("POST");
-        int id = bundle.getInt("ID");
         if(resultCode == -1){
+            PostItem post = (PostItem)bundle.getSerializable("POST");
+            int id = bundle.getInt("ID");
             Log.d("MAIN" , " " +id );
             Log.d("PRIMA ", allList.toString());
             addToList(post, id);
@@ -49,7 +49,21 @@ public class AllFragment extends Fragment {
             Log.d("MAIN", " " + id);
             UpdateList();
         }
+        if(resultCode == 99){
+            deleteElement(bundle.getInt("ID"));
+            UpdateList();
+        }
 
+    }
+
+    public void deleteElement(int id){
+        if(id != allList.size())
+            allList.remove(id);
+    }
+
+
+    public ArrayList<PostItem> getAllList(){
+        return allList;
     }
 
     public void addToList(PostItem postItem, int position){
@@ -69,11 +83,18 @@ public class AllFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("ALLLIST", allList);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
-
+        if(savedInstanceState != null)
+            allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
         allList = getArguments().getParcelableArrayList("postList");
 
         Log.d("Hey, listen", "" + allList);

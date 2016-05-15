@@ -28,6 +28,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AllFragment fragment;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        //codice di piero per caricamento lista
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //codice di piero per caricamento lista
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //put element to DB, codice di piero
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -44,25 +76,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        for(int i = 0; i < postList.size(); i++){
 //            Log.d("TAG", postList.get(i).toString());
 //        }
-
-        for(int i = 0; i<30;i++){
-            PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
-            postList.add(post);
+        if(savedInstanceState != null){
+            postList = (ArrayList<PostItem>) savedInstanceState.getSerializable("POSTLIST");
+            Log.d("LISTA CARICATA", postList.toString());
+        }else{
+            for(int i = 0; i<30;i++){
+                PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
+                postList.add(post);
+            }
         }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("postList", postList);
+
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         fragment = AllFragment.getIstance();
-        fragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.commit();
+        final Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("postList", postList);
+        if(getFragmentManager().findFragmentByTag("ALLFRAG") == null) {
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
+            fragmentTransaction.commit();
+        }
 
 
 
@@ -71,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //dettaglio("Come stai?", postList.size());
-                goToDetailFromButtonNew(postList.size());
+                goToDetailFromButtonNew(postList.size(), true);
             }
         });
 
@@ -81,9 +119,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getExtras();
-        PostItem post = (PostItem)bundle.getSerializable("POST");
-        int id = bundle.getInt(ID);
+
+
         if(resultCode == RESULT_OK){
+            PostItem post = (PostItem)bundle.getSerializable("POST");
+            int id = bundle.getInt(ID);
             Log.d("MAIN" , " " +id );
             Log.d("PRIMA ", postList.toString());
             fragment.addToList(post, id);
@@ -91,12 +131,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("MAIN", " " + id);
             fragment.UpdateList();
         }
-
-
+        if(resultCode == 99){
+            fragment.deleteElement(bundle.getInt("ID"));
+            fragment.UpdateList();
+        }
 
     }
 
-    public void goToDetailFromButtonNew(int size){
+    public void goToDetailFromButtonNew(int size, boolean nuovo){
         Bundle bundle = new Bundle();
         bundle.putSerializable("MyPost", new PostItem());
         bundle.putInt(ID, size);
@@ -175,8 +217,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    public void update(PostItem post, int id) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("POSTLIST", postList);
+        Log.d("LIST salvaa ", postList.toString() );
+    }
 
+    @Override
+    public void update(PostItem post, int id) {
+    /*
         Log.d("UPDATE", "UPDATE");
         if(postList.isEmpty())
             postList.add(post);
@@ -188,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     id = postList.size();
                 postList.add(post);
             }
-        }
+        }*/
 
 
 
