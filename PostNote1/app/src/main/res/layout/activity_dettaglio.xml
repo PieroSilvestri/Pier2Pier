@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-=======
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
->>>>>>> Piero_Munsra
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
     android:orientation="vertical"
     tools:context="com.example.piero.postnote1.MainActivity">
 
-<<<<<<< HEAD
+
     <include layout="@layout/content_dettaglio" />
 
     <android.support.design.widget.FloatingActionButton
@@ -28,7 +28,7 @@
         android:layout_margin="@dimen/fab_margin"/>
 
 </android.support.design.widget.CoordinatorLayout>
-=======
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,4 +74,4 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>
->>>>>>> Piero_Munsra
+
