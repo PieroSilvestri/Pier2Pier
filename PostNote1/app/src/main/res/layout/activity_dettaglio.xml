@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> Piero_Munsra
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,6 +12,7 @@
     android:orientation="vertical"
     tools:context="com.example.piero.postnote1.MainActivity">
 
+<<<<<<< HEAD
     <include layout="@layout/content_dettaglio" />
 
     <android.support.design.widget.FloatingActionButton
@@ -23,3 +28,50 @@
         android:layout_margin="@dimen/fab_margin"/>
 
 </android.support.design.widget.CoordinatorLayout>
+=======
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/fab2"
+        android:layout_alignEnd="@+id/fab2"
+        android:layout_above="@+id/fab2" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/postTitle"
+        android:layout_below="@+id/detailDelete" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete"
+        android:id="@+id/detailDelete"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/postTitle"
+        android:layout_alignEnd="@+id/postTitle" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="annulla"
+        android:id="@+id/detailAnnulla"
+        android:layout_above="@+id/postTitle"
+        android:layout_centerHorizontal="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_done_all_black_48dp"
+        app:backgroundTint="#0deb24"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
+>>>>>>> Piero_Munsra

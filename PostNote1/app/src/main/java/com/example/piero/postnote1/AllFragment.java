@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,65 @@ public class AllFragment extends Fragment {
         Log.d(TAGCICLO, "On Create");
     }
 
+    public static AllFragment getIstance(){
+        return new AllFragment();
+    }
+
+
     private static final String TAG = "RecyclerViewFragment";
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
+        if(resultCode == -1){
+            PostItem post = (PostItem)bundle.getSerializable("POST");
+            int id = bundle.getInt("ID");
+            Log.d("MAIN" , " " +id );
+            Log.d("PRIMA ", allList.toString());
+            addToList(post, id);
+            Log.d("Dopo ", allList.toString());
+            Log.d("MAIN", " " + id);
+            UpdateList();
+        }
+        if(resultCode == 99){
+            deleteElement(bundle.getInt("ID"));
+            UpdateList();
+        }
+
+    }
+
+    public void deleteElement(int id){
+        if(id != allList.size())
+            allList.remove(id);
+    }
+
+
+    public ArrayList<PostItem> getAllList(){
+        return allList;
+    }
+
+    public void addToList(PostItem postItem, int position){
+
+        if(!allList.isEmpty()){
+            if(position < allList.size()){
+                allList.set(position, postItem);
+                Log.d("set ", allList.get(position).toString());
+            }else {
+                allList.add(postItem);
+                Log.d("set ", allList.get(position).toString());
+            }
+        }else {
+            allList.add(postItem);
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("ALLLIST", allList);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +115,9 @@ public class AllFragment extends Fragment {
         } else {
 
         }
+        if(savedInstanceState != null)
+            allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
+        allList = getArguments().getParcelableArrayList("postList");
 
 
         Log.d("Hey, listen", "" + allList);
@@ -68,7 +128,7 @@ public class AllFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
-        //mLayoutManager.scrollToPosition(1);
+        //mLayoutManager.scrollToPosition(allList.size()-1);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -78,12 +138,14 @@ public class AllFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                Log.d("TAG", "" + position);
                 PostItem item = allList.get(position);
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
                 bundle.putInt("ID", position);
-                startActivity(i.putExtras(bundle));
+                //startActivity(i.putExtras(bundle));
+                startActivityForResult(i.putExtras(bundle), 10);
             }
 
             @Override
@@ -182,9 +244,6 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
-
-
-
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }
