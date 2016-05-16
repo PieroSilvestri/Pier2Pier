@@ -17,12 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
-    private ArrayList<PostItem> postList = new ArrayList<PostItem>();
+    public static ArrayList<PostItem> postList = new ArrayList<PostItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +39,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
-//        for(int i = 0; i < postList.size(); i++){
-//            Log.d("TAG", postList.get(i).toString());
-//        }
-
-        for(int i = 0; i<30;i++){
-            PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
-            postList.add(post);
-        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -61,19 +54,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String formattedDate = df.format(c.getTime());
 
+
+        if(postList.isEmpty()){
+            for(int i=0; i<30; i++){
+                PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
+                postList.add(post);
+            }
+        } else {
+
+        }
+        
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dettaglio("Come stai?", postList.size());
+                //dettaglio("Come stai?", postList.size());
+                PostItem post = new PostItem("New", "nuova", "wewe", 2);
+                postList.add(post);
+                AllFragment.UpdateList();
             }
         });
-
     }
     public void dettaglio(String value, int id){
         Intent openPage1 = new Intent(MainActivity.this,Dettaglio.class);
         Bundle bundle = new Bundle();
+
         bundle.putInt(ID, id);
         bundle.putString(VALORE, value);
         openPage1.putExtras(bundle);

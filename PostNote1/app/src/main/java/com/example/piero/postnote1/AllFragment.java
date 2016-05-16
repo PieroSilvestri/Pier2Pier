@@ -23,12 +23,25 @@ import java.util.List;
 
 public class AllFragment extends Fragment {
 
-    private static ArrayList<PostItem> allList = new ArrayList<>();
+    private static ArrayList<PostItem> allList = new ArrayList<PostItem>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
+    public String TAGCICLO = "CICLODIVITA";
 
     public AllFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAGCICLO, "On Attach");
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAGCICLO, "On Create");
     }
 
     private static final String TAG = "RecyclerViewFragment";
@@ -39,7 +52,13 @@ public class AllFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
-        allList = getArguments().getParcelableArrayList("postList");
+        Log.d(TAGCICLO, "onCreateView");
+        if (allList.isEmpty()){
+            allList = getArguments().getParcelableArrayList("postList");
+        } else {
+
+        }
+
 
         Log.d("Hey, listen", "" + allList);
 
@@ -47,8 +66,9 @@ public class AllFragment extends Fragment {
 
         mAdapter = new PostAdapter(allList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
-        //mLayoutManager.scrollToPosition(allList.size()-1);
+        //mLayoutManager.scrollToPosition(1);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -73,6 +93,42 @@ public class AllFragment extends Fragment {
         }));
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAGCICLO, "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAGCICLO, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAGCICLO, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAGCICLO, "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAGCICLO, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAGCICLO, "onDetach");
     }
 
     public interface ClickListener {
@@ -116,6 +172,7 @@ public class AllFragment extends Fragment {
 
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
         }
 
         @Override
@@ -125,6 +182,9 @@ public class AllFragment extends Fragment {
     }
 
     public static void UpdateList() {
+
+
+
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }

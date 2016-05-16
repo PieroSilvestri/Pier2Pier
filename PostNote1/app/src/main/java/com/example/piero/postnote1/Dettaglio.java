@@ -19,6 +19,7 @@ public class Dettaglio extends AppCompatActivity {
     private static final String ID = "ID";
     private EditText text1;
     private EditText titolo;
+    private TextView date;
     private int id;
     private PostItem postItem;
     public interface IOChangeList{
@@ -56,25 +57,28 @@ public class Dettaglio extends AppCompatActivity {
 
         titolo = (EditText)findViewById(R.id.postTitle);
         text1 = (EditText)findViewById(R.id.editText);
+        date = (TextView)findViewById(R.id.date);
 
         if(postItem == null){
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
+
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
+            date.setText("" + postItem.getcreationDate());
         }
 
 
-        FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
-        btnLetter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()), id);
-
-                //cambiaTesto(text1.getText().toString(), id);
-            }
-        });
+//        FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
+//        btnLetter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()), id);
+//
+//                //cambiaTesto(text1.getText().toString(), id);
+//            }
+//        });
 
         Button delete = (Button)findViewById(R.id.detailDelete);
         delete.setOnClickListener(new View.OnClickListener() {
