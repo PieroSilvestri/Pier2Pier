@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -21,6 +22,7 @@ public class Dettaglio extends AppCompatActivity {
     private EditText titolo;
     private int id = -1;
     private PostItem postItem;
+    private TextView date;
     public interface IOChangeList{
         void update(PostItem post, int id);
     }
@@ -71,11 +73,11 @@ public class Dettaglio extends AppCompatActivity {
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()), id);
+                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() , postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
                 Intent intent = new Intent(Dettaglio.this, MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getId()));
+                bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate(), postItem.getId()));
                 bundle.putInt(ID, id);
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);

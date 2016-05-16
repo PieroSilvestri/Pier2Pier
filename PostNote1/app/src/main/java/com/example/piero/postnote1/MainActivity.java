@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("LISTA CARICATA", postList.toString());
         }else{
             for(int i = 0; i<30;i++){
-                PostItem post = new PostItem("Test " + i, "Contenuto " + i, i);
+                PostItem post = new PostItem("Test " + i, "Contenuto " + i, "", i);
                 postList.add(post);
             }
         }
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragment = AllFragment.getIstance();
-        final Bundle bundle = new Bundle();
+
         bundle.putParcelableArrayList("postList", postList);
         if(getFragmentManager().findFragmentByTag("ALLFRAG") == null) {
             fragment.setArguments(bundle);
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //dettaglio("Come stai?", postList.size());
                 goToDetailFromButtonNew(postList.size(), true);
             }
-        } else {
+        });
 
     }
 
@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getExtras();
-
 
         if(resultCode == RESULT_OK){
             PostItem post = (PostItem)bundle.getSerializable("POST");

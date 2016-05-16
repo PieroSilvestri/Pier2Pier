@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
@@ -14,20 +14,6 @@
 
 
     <include layout="@layout/content_dettaglio" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_done_all_black_48dp"
-        app:backgroundTint="#0deb24"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentLeft="false"
-        android:layout_margin="@dimen/fab_margin"/>
-
-</android.support.design.widget.CoordinatorLayout>
 
     <EditText
         android:layout_width="wrap_content"
