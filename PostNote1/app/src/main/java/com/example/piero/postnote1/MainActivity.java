@@ -1,8 +1,10 @@
 package com.example.piero.postnote1;
 
-;import android.app.FragmentManager;
+;import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +28,8 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
+    DatabaseHelper myDB;
+    String formattedDate;
     public static ArrayList<PostItem> postList = new ArrayList<PostItem>();
 
     @Override
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        myDB = new DatabaseHelper(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,20 +63,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        String formattedDate = df.format(c.getTime());
+        formattedDate = df.format(c.getTime());
 
+        viewAll();
+
+        /*
         for(int i=0; i<30; i++){
             PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
             postList.add(post);
         }
-        
+        */
+
         FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //dettaglio("Come stai?", postList.size());
-                PostItem post = new PostItem("New", "nuova", "wewe", 2);
-                postList.add(post);
+//                PostItem post = new PostItem("New", "nuova", "wewe", 2);
+//                postList.add(post);
+                AddData();
                 AllFragment.UpdateList();
             }
         });
@@ -83,6 +95,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         openPage1.putExtras(bundle);
         startActivity(openPage1);
 
+    }
+
+    public void AddData(){
+        boolean isInserted = myDB.insertData("Titolo1".toString(), "Testo di prova".toString(), "12 Dicembre 20126".toString());
+
+        if(isInserted){
+            Toast.makeText(MainActivity.this, "Dati inseriti", Toast.LENGTH_LONG).show();
+            viewAll();
+        }
+        else {
+            Toast.makeText(MainActivity.this, "Dati NON inseriti", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void viewAll(){
+        PostItem post;
+        postList.clear();
+        Cursor res = myDB.getAllData();
+        if(res.getCount() == 0){
+            showMessage("Error", "Nothing found");
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+
+        while(res.moveToNext()){
+            post = new PostItem(res.getString(1), res.getString(2), formattedDate, 1);
+            /*
+            buffer.append("ID" + res.getString(0) + "\n");
+            buffer.append("TITOLO" + res.getString(1) + "\n");
+            buffer.append("TESTO" + res.getString(2) + "\n");
+            buffer.append("DATE" + res.getString(3) + "\n");
+            */
+            postList.add(post);
+        }
+
+        /*
+        for(int i=0; i<30; i++){
+            PostItem post = new PostItem("Test " + i, "Contenuto " + i, formattedDate, i);
+            postList.add(post);
+        }
+        */
+
+        showMessage("Data", buffer.toString());
+    }
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder buldier = new AlertDialog.Builder(this);
+        buldier.setCancelable(true);
+        buldier.setTitle(title);
+        buldier.setMessage(message);
+        buldier.show();
     }
 
     @Override
