@@ -73,7 +73,7 @@ public class Dettaglio extends AppCompatActivity {
         }
         setTitle("" + titolo.getText());
 
-        FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
+        /*FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +89,7 @@ public class Dettaglio extends AppCompatActivity {
 
                 //cambiaTesto(text1.getText().toString(), id);
             }
-        });
+        });*/
         Button delete;
         delete = (Button)findViewById(R.id.detailDelete);
         delete.setOnClickListener(new View.OnClickListener() {
