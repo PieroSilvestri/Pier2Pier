@@ -1,9 +1,11 @@
 package com.example.piero.postnote1;
 
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
+    DatabaseHelper myDB;
     private AllFragment fragment;
 
     @Override
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
 
         //codice di piero per caricamento lista
+        viewAll();
+        fragment.UpdateList();
 
     }
 
@@ -68,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        myDB = new DatabaseHelper(this);
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -82,10 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             postList = (ArrayList<PostItem>) savedInstanceState.getSerializable("POSTLIST");
             Log.d("LISTA CARICATA", postList.toString());
         }else{
-            for(int i = 0; i<30;i++){
-                PostItem post = new PostItem("Test " + i, "Contenuto " + i, "", i);
-                postList.add(post);
-            }
+            viewAll();
         }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -143,6 +148,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
+    }
+
+    public void viewAll(){
+        PostItem post;
+        postList.clear();
+        Cursor res = myDB.getAllData();
+        if(res.getCount() == 0){
+            showMessage("Error", "Nothing Found");
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        while(res.moveToNext()){
+            post = new PostItem(res.getString(1), res.getString(2), res.getString(3), res.getInt(0));
+
+            postList.add(post);
+            /*
+            for(int i = 0; i<30;i++){
+                PostItem post = new PostItem("Test " + i, "Contenuto " + i, "", i);
+                postList.add(post);
+            }
+             */
+        }
+
+    }
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){
@@ -229,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("POSTLIST", postList);
-        Log.d("LIST salvaa ", postList.toString() );
+        Log.d("LIST salvaa ", postList.toString());
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 
@@ -22,6 +23,7 @@ public class Dettaglio extends AppCompatActivity {
     private int id = -1;
     private PostItem postItem;
     private TextView date;
+    DatabaseHelper myDB;
     public interface IOChangeList{
         void update(PostItem post, int id);
     }
@@ -46,6 +48,9 @@ public class Dettaglio extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
+
+        myDB = new DatabaseHelper(this);
+
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
@@ -77,14 +82,19 @@ public class Dettaglio extends AppCompatActivity {
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() , postItem.getId()), id);
+                Log.d("cliccato", "cliccato");
+                AddData();
+//                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() ,"" ,  postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
-                Intent intent = new Intent(Dettaglio.this, MainActivity.class);
+               /* Intent intent = new Intent(Dettaglio.this, MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate(), postItem.getId()));
+               // bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate(), postItem.getId()));
+                bundle.putSerializable(POST, new PostItem("" + titolo.getText(), "" + text1.getText(), "", postItem.getId()));
                 bundle.putInt(ID, id);
                 intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);
+                setResult(RESULT_OK, intent);*/
+
+
                 finish();
 
                 //cambiaTesto(text1.getText().toString(), id);
@@ -113,6 +123,17 @@ public class Dettaglio extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public void AddData(){
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(),
+                date.getText().toString());
+        if(isInserted){
+            Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(Dettaglio.this, "Data NOT Inserted", Toast.LENGTH_LONG).show();
+        }
     }
     /*
     * @String message
