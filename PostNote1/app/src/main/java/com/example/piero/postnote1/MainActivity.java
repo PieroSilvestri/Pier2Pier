@@ -16,12 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 ;
 
@@ -126,29 +124,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getExtras();
+        if(data != null){
+            Bundle bundle = data.getExtras();
 
-        if(resultCode == RESULT_OK){
-            PostItem post = (PostItem)bundle.getSerializable("POST");
-            int id = bundle.getInt(ID);
-            Log.d("MAIN" , " " +id );
-            Log.d("PRIMA ", postList.toString());
-            fragment.addToList(post, id);
-            Log.d("Dopo ", postList.toString());
-            Log.d("MAIN", " " + id);
-            fragment.UpdateList();
-        }
-        if(resultCode == 99){
-            fragment.deleteElement(bundle.getInt("ID"));
-            fragment.UpdateList();
+            if(resultCode == RESULT_OK){
+                PostItem post = (PostItem)bundle.getSerializable("POST");
+                int id = bundle.getInt(ID);
+                Log.d("MAIN" , " " +id );
+                Log.d("PRIMA ", postList.toString());
+                fragment.addToList(post, id);
+                Log.d("Dopo ", postList.toString());
+                Log.d("MAIN", " " + id);
+                fragment.UpdateList();
+            }
+            if(resultCode == 99){
+                fragment.deleteElement(bundle.getInt("ID"));
+                fragment.UpdateList();
+            }
         }
 
     }
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){
         Bundle bundle = new Bundle();
-        bundle.putSerializable("MyPost", new PostItem());
+       // bundle.putSerializable("MyPost", new PostItem());
         bundle.putInt(ID, size);
+        bundle.putString("NUOVO", "NUOVO");
         startActivityForResult(new Intent(MainActivity.this, Dettaglio.class).putExtras(bundle), 10);
 
     }

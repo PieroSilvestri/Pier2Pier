@@ -2,10 +2,10 @@ package com.example.piero.postnote1;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -38,6 +37,8 @@ public class Dettaglio extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(0, new Intent(Dettaglio.this, MainActivity.class));
+        finish();
 
     }
 
@@ -51,6 +52,9 @@ public class Dettaglio extends AppCompatActivity {
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
+            id = getIntent().getExtras().getInt("ID");
+        }
+        if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID");
         }
 
