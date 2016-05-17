@@ -2,7 +2,11 @@ package com.example.piero.postnote1;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +14,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -22,6 +31,7 @@ public class Dettaglio extends AppCompatActivity {
     private int id = -1;
     private PostItem postItem;
     private TextView date;
+    private Button addFoto;
     public interface IOChangeList{
         void update(PostItem post, int id);
     }
@@ -77,7 +87,7 @@ public class Dettaglio extends AppCompatActivity {
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() , postItem.getId()), id);
+                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate(), postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
                 Intent intent = new Intent(Dettaglio.this, MainActivity.class);
                 Bundle bundle = new Bundle();
@@ -113,7 +123,44 @@ public class Dettaglio extends AppCompatActivity {
                 finish();
             }
         });
+
+        imageView = (ImageView) findViewById(R.id.ivImage);
+
+        addFoto = (Button) findViewById(R.id.foto);
+        addFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickImage();
+                //galleryAddPic();
+                Log.d("PRESSED", "Premut");
+            }
+        });
     }
+
+    private static final int CAMERA_REQUEST=1;
+    private ImageView imageView;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CAMERA_REQUEST:
+                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                imageView.setImageBitmap(bitmap);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+
+
+
+    public void onPickImage() {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
+    }
+
     /*
     * @String message
     * Questo metodo permette di  annullare o tornare indietro durante la detail activity
