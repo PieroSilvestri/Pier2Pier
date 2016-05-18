@@ -21,6 +21,7 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
+    private String myID;
     private PostItem postItem;
     private TextView date;
     DatabaseHelper myDB;
@@ -63,8 +64,6 @@ public class Dettaglio extends AppCompatActivity {
             id = getIntent().getExtras().getInt("ID");
         }
 
-
-
         titolo = (EditText)findViewById(R.id.postTitle);
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
@@ -72,9 +71,11 @@ public class Dettaglio extends AppCompatActivity {
         if(postItem == null){
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
+
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
+            myID = String.valueOf(postItem.getId());
         }
         setTitle("" + titolo.getText());
 
@@ -83,7 +84,14 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("cliccato", "cliccato");
-                AddData();
+
+                if(getIntent().getExtras().getString("NUOVO") != null){
+                    AddData();
+                }
+                else{
+                    UpdateDate();
+                };
+
 //                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() ,"" ,  postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
                /* Intent intent = new Intent(Dettaglio.this, MainActivity.class);
@@ -93,7 +101,6 @@ public class Dettaglio extends AppCompatActivity {
                 bundle.putInt(ID, id);
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);*/
-
 
                 finish();
 
@@ -105,11 +112,14 @@ public class Dettaglio extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Log.d("delete", "delete");
                 Intent i = new Intent(Dettaglio.this, MainActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("ID", id);
                 setResult(99, i.putExtras(bundle));
+                */
+                DeleteData();
                 finish();
             }
         });
@@ -133,6 +143,28 @@ public class Dettaglio extends AppCompatActivity {
         }
         else {
             Toast.makeText(Dettaglio.this, "Data NOT Inserted", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void UpdateDate(){
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(),
+                date.getText().toString());
+        if(isUpdate){
+            Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(Dettaglio.this, "Data Not Updated", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void DeleteData(){
+        Integer deleteRows = myDB.deleteData(myID);
+        if(deleteRows > 0){
+            Toast.makeText(Dettaglio.this, "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
         }
     }
     /*

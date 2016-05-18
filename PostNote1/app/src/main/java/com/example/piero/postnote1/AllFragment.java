@@ -53,19 +53,19 @@ public class AllFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getExtras();
+ //        Bundle bundle = data.getExtras();
         if(resultCode == -1){
-            PostItem post = (PostItem)bundle.getSerializable("POST");
-            int id = bundle.getInt("ID");
-            Log.d("MAIN" , " " +id );
+            //PostItem post = (PostItem)bundle.getSerializable("POST");
+            //int id = bundle.getInt("ID");
+            //Log.d("MAIN" , " " +id );
             Log.d("PRIMA ", allList.toString());
-            addToList(post, id);
+            //addToList(post, id);
             Log.d("Dopo ", allList.toString());
-            Log.d("MAIN", " " + id);
+            //Log.d("MAIN", " " + id);
             UpdateList();
         }
         if(resultCode == 99){
-            deleteElement(bundle.getInt("ID"));
+            //deleteElement(bundle.getInt("ID"));
             UpdateList();
         }
 

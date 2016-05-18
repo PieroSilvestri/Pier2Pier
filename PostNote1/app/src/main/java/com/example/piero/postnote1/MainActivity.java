@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             postList = (ArrayList<PostItem>) savedInstanceState.getSerializable("POSTLIST");
             Log.d("LISTA CARICATA", postList.toString());
         }else{
-            viewAll();
+
         }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         postList.clear();
         Cursor res = myDB.getAllData();
         if(res.getCount() == 0){
-            showMessage("Error", "Nothing Found");
+            showMessage("Error", "Lista vuota");
             return;
         }
 
