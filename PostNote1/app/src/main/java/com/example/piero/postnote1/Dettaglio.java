@@ -1,7 +1,10 @@
 package com.example.piero.postnote1;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -16,6 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -132,10 +139,8 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
-        listen.setVisibility(View.INVISIBLE);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
-            Log.d("NOTICEMESENPAI", "Diverso da null");
         }
 
         if(savedInstanceState != null) {
@@ -171,6 +176,7 @@ public class Dettaglio extends AppCompatActivity {
                 mFileName = postItem.getPosizioneAudio();
             date.setText(postItem.getcreationDate());
             myID = String.valueOf(postItem.getId());
+            imageView.setImageBitmap(loadBitmap(getApplicationContext(), String.valueOf(myID)));
         }
         setTitle("" + titolo.getText());
         Button save = (Button) findViewById(R.id.Save);
@@ -267,7 +273,6 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onPickImage();
-                //galleryAddPic();
                 Log.d("PRESSED", "Premut");
             }
         });
@@ -314,12 +319,50 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                //eliminaFoto.setVisibility(View.VISIBLE);
+                String nomeFile = String.valueOf(postItem.getId());
+                saveFile(getApplicationContext(), bitmap, nomeFile);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    public static void saveFile(Context context, Bitmap b, String picName){
+        FileOutputStream fos;
+        try {
+            fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        }
+        catch (FileNotFoundException e) {
+            Log.d("CANCELLATO", "file not found");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.d("CANCELLATO", "io exception");
+            e.printStackTrace();
+        }
+    }
+
+    public static Bitmap loadBitmap(Context context, String picName){
+        Bitmap b = null;
+        FileInputStream fis;
+        try {
+            fis = context.openFileInput(picName);
+            b = BitmapFactory.decodeStream(fis);
+            fis.close();
+
+        }
+        catch (FileNotFoundException e) {
+            Log.d("CARICATO", "file not found");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.d("CARICATO", "io exception");
+            e.printStackTrace();
+        }
+        return b;
     }
 
 
