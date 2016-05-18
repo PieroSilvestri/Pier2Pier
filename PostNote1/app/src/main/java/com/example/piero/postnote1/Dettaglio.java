@@ -1,18 +1,17 @@
 package com.example.piero.postnote1;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
@@ -20,21 +19,26 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.SequenceInputStream;
-import java.io.Serializable;
 import java.util.Date;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
     private static final String ID = "ID";
+    private static final String LOG_TAG = "AudioRecordTest";
+    private static final int CAMERA_REQUEST=1;
+
+    private ImageView imageView;
+    private static Bitmap bitmap;
+    private Button addFoto;
+    private Button eliminaFoto;
     private EditText text1;
     private EditText titolo;
     private int id = -1;
     private PostItem postItem;
     private TextView date;
-    private TextView listening;
+
     private String posizione;
     private String posizioneTemp;
-    private static final String LOG_TAG = "AudioRecordTest";
     private static String mFileName = null;
 
     private MediaRecorder mRecorder = null;
@@ -75,7 +79,6 @@ public class Dettaglio extends AppCompatActivity {
     private void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
-        listening.setText("Start playing");
     }
 
     private void startRecording() {
@@ -100,18 +103,6 @@ public class Dettaglio extends AppCompatActivity {
         mRecorder = null;
     }
 
-    public interface IOChangeList{
-        void update(PostItem post, int id);
-    }
-
-    private IOChangeList mListener = new IOChangeList() {
-        @Override
-        public void update(PostItem post, int id) {
-        }
-
-
-    };
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -125,6 +116,16 @@ public class Dettaglio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dettaglio);
+
+        imageView = (ImageView) findViewById(R.id.ivImage);
+
+        eliminaFoto = (Button) findViewById(R.id.eliminaFoto);
+
+        if(bitmap != null){
+            imageView.setImageBitmap(bitmap);
+            Log.d("NOTICEMESENPAI", "Diverso da null");
+        }
+
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
@@ -137,7 +138,6 @@ public class Dettaglio extends AppCompatActivity {
             id = getIntent().getExtras().getInt("ID");
         }
 
-        listening = (TextView) findViewById(R.id.listening);
         titolo = (EditText)findViewById(R.id.postTitle);
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
@@ -146,6 +146,7 @@ public class Dettaglio extends AppCompatActivity {
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
             mFileName = posizione + id + ".mp3";
+            date.setText("" + new Date());
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
@@ -153,14 +154,13 @@ public class Dettaglio extends AppCompatActivity {
                 mFileName = posizione + postItem.getId() + ".mp3";
             else
                 mFileName = postItem.getPosizioneAudio();
+            date.setText(postItem.getcreationDate());
         }
         setTitle("" + titolo.getText());
-
-        FloatingActionButton btnLetter = (FloatingActionButton)findViewById(R.id.fab2);
-        btnLetter.setOnClickListener(new View.OnClickListener() {
+        Button save = (Button) findViewById(R.id.Save);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate(), postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
                 Intent intent = new Intent(Dettaglio.this, MainActivity.class);
                 Bundle bundle = new Bundle();
@@ -175,12 +175,10 @@ public class Dettaglio extends AppCompatActivity {
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);
                 finish();
-
-                //cambiaTesto(text1.getText().toString(), id);
             }
         });
 
-        Button recordAudio = (Button) findViewById(R.id.audio);
+        final Button recordAudio = (Button) findViewById(R.id.audio);
         recordAudio.setOnClickListener(new View.OnClickListener() {
             boolean mStartRecording = true;
             @Override
@@ -188,10 +186,9 @@ public class Dettaglio extends AppCompatActivity {
 
                 onRecord(mStartRecording);
                 if (mStartRecording) {
-                    date.setText("Stop recording");
+                    recordAudio.setText("Stop recording");
                 } else {
-                    date.setText("Start recording");
-
+                    recordAudio.setText("Start recording");
                 }
                 mStartRecording = !mStartRecording;
 
@@ -200,17 +197,12 @@ public class Dettaglio extends AppCompatActivity {
         });
 
         Button listen = (Button) findViewById(R.id.listen);
+        listen.setClickable(false);
         listen.setOnClickListener(new View.OnClickListener() {
             boolean mStartPlaying = true;
 
             public void onClick(View v) {
                 onPlay(mStartPlaying);
-                if (mStartPlaying) {
-                    listening.setText("Stop playing");
-                } else {
-                    listening.setText("Start playing");
-                   // postItem.setAudio(mRecorder);
-                }
                 mStartPlaying = !mStartPlaying;
             }
 
@@ -236,33 +228,50 @@ public class Dettaglio extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("annulla", "annulla");
                 setResult(0, new Intent(Dettaglio.this, MainActivity.class));
+                bitmap = null;
                 finish();
             }
         });
+
+        addFoto = (Button) findViewById(R.id.foto);
+        addFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPickImage();
+                //galleryAddPic();
+                Log.d("PRESSED", "Premut");
+            }
+        });
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CAMERA_REQUEST:
+                bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                imageView.setImageBitmap(bitmap);
+                eliminaFoto.setVisibility(View.VISIBLE);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+
+
+
+    public void onPickImage() {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
+    }
+
     /*
     * @String message
     * Questo metodo permette di  annullare o tornare indietro durante la detail activity
     * */
-    private void mYdialog(String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-
-        builder.setMessage(message)
-                .setPositiveButton("SI", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Dettaglio.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-
-        builder.create();
-    }
 
     private  static void saveAudio(String oldAudio, String newAudio) throws IOException {
         //postItem.getPosizioneAudio(), posizioneTemp
@@ -330,17 +339,8 @@ public class Dettaglio extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(POST, (Serializable) postItem);
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
-
-    }
-
-    public void cambiaTesto(String value, int id){
-        Intent openPage1 = new Intent(Dettaglio.this,MainActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("VALORENUOVO", value);
-        bundle.putInt("ID", id);
-        openPage1.putExtras(bundle);
-        startActivity(openPage1);
     }
 }
