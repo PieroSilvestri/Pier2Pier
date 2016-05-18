@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 ;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Dettaglio.IOChangeList {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
@@ -75,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-//        for(int i = 0; i < postList.size(); i++){
-//            Log.d("TAG", postList.get(i).toString());
-//        }
         if(savedInstanceState != null){
             postList = (ArrayList<PostItem>) savedInstanceState.getSerializable("POSTLIST");
             Log.d("LISTA CARICATA", postList.toString());
@@ -117,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //dettaglio("Come stai?", postList.size());
                 goToDetailFromButtonNew(count, true);
                 count++;
             }
@@ -151,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){
         Bundle bundle = new Bundle();
-       // bundle.putSerializable("MyPost", new PostItem());
         bundle.putInt(ID, size);
         bundle.putString("NUOVO", "NUOVO");
         startActivityForResult(new Intent(MainActivity.this, Dettaglio.class).putExtras(bundle), 10);
@@ -161,12 +155,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void dettaglio(String value, int id){
         Intent openPage1 = new Intent(MainActivity.this,Dettaglio.class);
         Bundle bundle = new Bundle();
-
         bundle.putInt(ID, id);
         bundle.putString(VALORE, value);
         openPage1.putExtras(bundle);
         startActivity(openPage1);
-
     }
 
     @Override
@@ -237,23 +229,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("LIST salvaa ", postList.toString() );
     }
 
-    @Override
-    public void update(PostItem post, int id) {
-    /*
-        Log.d("UPDATE", "UPDATE");
-        if(postList.isEmpty())
-            postList.add(post);
-        else {
-            if (postList.get(id) != null)
-                postList.set(id, post);
-            else {
-                if (id < 0)
-                    id = postList.size();
-                postList.add(post);
-            }
-        }*/
-
-
-
-    }
 }
