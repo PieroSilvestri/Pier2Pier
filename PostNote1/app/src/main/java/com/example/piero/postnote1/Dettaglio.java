@@ -20,7 +20,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.SequenceInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -152,7 +155,11 @@ public class Dettaglio extends AppCompatActivity {
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
             mFileName = posizione + id + ".mp3";
-            date.setText("" + new Date());
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm");
+            String formattedDate = df.format(c.getTime());
+            String data = ("Creazione: \n" + formattedDate);
+            date.setText(data);
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
@@ -306,7 +313,7 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                eliminaFoto.setVisibility(View.VISIBLE);
+                //eliminaFoto.setVisibility(View.VISIBLE);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
