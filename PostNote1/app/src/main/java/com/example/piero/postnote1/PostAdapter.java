@@ -19,7 +19,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             super(view);
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
-            //id = (TextView) view.findViewById(R.id.year);
+            id = (TextView) view.findViewById(R.id.ID);
         }
 
     }
@@ -38,6 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
+        holder.id.setText("" + post.getId());
         //holder.data.setText(post.getYear());
     }
 

@@ -148,7 +148,7 @@ public class Dettaglio extends AppCompatActivity {
             listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
-            id = getIntent().getExtras().getInt("ID");
+            id = getIntent().getExtras().getInt("ID") + 1;
         }
 
 
@@ -184,7 +184,7 @@ public class Dettaglio extends AppCompatActivity {
                 }
                 else{
                     UpdateDate();
-                };
+                }
 
 //                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() ,"" ,  postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
@@ -305,6 +305,16 @@ public class Dettaglio extends AppCompatActivity {
             Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
         }
     }
+    public void DeleteDataFragment(String id){
+        Integer deleteRows = myDB.deleteData(id);
+        if(deleteRows > 0){
+            Toast.makeText(Dettaglio.this, "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
 
 
@@ -326,6 +336,7 @@ public class Dettaglio extends AppCompatActivity {
 
 
     public void onPickImage() {
+        Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
     }
