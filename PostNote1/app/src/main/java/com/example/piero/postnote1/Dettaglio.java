@@ -200,7 +200,7 @@ public class Dettaglio extends AppCompatActivity {
                 bundle.putInt(ID, id);
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);*/
-
+                bitmap = null;
                 finish();
             }
         });
