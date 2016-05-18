@@ -32,6 +32,12 @@ public class Dettaglio extends AppCompatActivity {
     private PostItem postItem;
     private TextView date;
     private Button addFoto;
+    private Button eliminaFoto;
+
+    private static final int CAMERA_REQUEST=1;
+    private ImageView imageView;
+    private static Bitmap bitmap;
+
     public interface IOChangeList{
         void update(PostItem post, int id);
     }
@@ -56,6 +62,16 @@ public class Dettaglio extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettaglio);
+
+        imageView = (ImageView) findViewById(R.id.ivImage);
+
+        eliminaFoto = (Button) findViewById(R.id.eliminaFoto);
+
+        if(bitmap != null){
+            imageView.setImageBitmap(bitmap);
+            Log.d("NOTICEMESENPAI", "Diverso da null");
+        }
+
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
@@ -120,11 +136,10 @@ public class Dettaglio extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("annulla", "annulla");
                 setResult(0, new Intent(Dettaglio.this, MainActivity.class));
+                bitmap = null;
                 finish();
             }
         });
-
-        imageView = (ImageView) findViewById(R.id.ivImage);
 
         addFoto = (Button) findViewById(R.id.foto);
         addFoto.setOnClickListener(new View.OnClickListener() {
@@ -137,15 +152,15 @@ public class Dettaglio extends AppCompatActivity {
         });
     }
 
-    private static final int CAMERA_REQUEST=1;
-    private ImageView imageView;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case CAMERA_REQUEST:
-                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
+                eliminaFoto.setVisibility(View.VISIBLE);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -181,7 +196,6 @@ public class Dettaglio extends AppCompatActivity {
 
                     }
                 });
-
         builder.create();
     }
 
@@ -212,9 +226,9 @@ public class Dettaglio extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putSerializable(POST, (Serializable) postItem);
         outState.putInt(ID, id);
-
     }
 
     public void cambiaTesto(String value, int id){
