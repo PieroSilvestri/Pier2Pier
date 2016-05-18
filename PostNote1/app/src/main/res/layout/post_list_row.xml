@@ -48,6 +48,16 @@
         android:layout_marginTop="7dp"
         android:textSize="15dp" />
 
+    <TextView
+        android:id="@+id/ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/testo"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignStart="@+id/title"
+        android:layout_marginTop="7dp"
+        android:textSize="15dp" />
+
     <!--<TextView-->
     <!--android:id="@+id/year"-->
     <!--android:textColor="@color/data"-->

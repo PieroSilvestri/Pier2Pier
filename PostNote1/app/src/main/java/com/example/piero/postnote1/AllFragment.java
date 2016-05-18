@@ -1,9 +1,12 @@
 package com.example.piero.postnote1;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,9 @@ public class AllFragment extends Fragment {
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
     public String TAGCICLO = "CICLODIVITA";
+    private String myID = "";
+    Dettaglio dettaglio;
+    DatabaseHelper myDB;
 
     public AllFragment() {
         // Required empty public constructor
@@ -104,12 +111,16 @@ public class AllFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
+        myDB = new DatabaseHelper(getActivity().getApplication());
+        dettaglio = new Dettaglio();
+
         Log.d(TAGCICLO, "onCreateView");
         if (allList.isEmpty()){
             allList = getArguments().getParcelableArrayList("postList");
         } else {
 
         }
+
         if(savedInstanceState != null)
             allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
         allList = getArguments().getParcelableArrayList("postList");
@@ -139,14 +150,32 @@ public class AllFragment extends Fragment {
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
-                bundle.putInt("ID", position);
+                bundle.putInt("ID", allList.get(position).getId());
                 //startActivity(i.putExtras(bundle));
                 startActivityForResult(i.putExtras(bundle), 10);
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Attenzione");
+                builder.setMessage("Vuoi cancellare sta roba?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("Position", String.valueOf(position));
+                        myID = String.valueOf(position);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+                builder.show();
+                AlertDialog d = builder.create();
             }
         }));
 
@@ -233,6 +262,7 @@ public class AllFragment extends Fragment {
 
         }
 
+
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -243,5 +273,8 @@ public class AllFragment extends Fragment {
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }
+
+
+
 
 }
