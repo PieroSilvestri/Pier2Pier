@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
     private AllFragment fragment;
+    private int count;
 
     @Override
     protected void onPause() {
@@ -81,10 +82,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(savedInstanceState != null){
             postList = (ArrayList<PostItem>) savedInstanceState.getSerializable("POSTLIST");
             Log.d("LISTA CARICATA", postList.toString());
+            count = savedInstanceState.getInt("COUNT");
         }else{
             for(int i = 0; i<30;i++){
                 PostItem post = new PostItem("Test " + i, "Contenuto " + i, "", i);
                 postList.add(post);
+                count++;
             }
         }
 
@@ -115,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //dettaglio("Come stai?", postList.size());
-                goToDetailFromButtonNew(postList.size(), true);
+                goToDetailFromButtonNew(count, true);
+                count++;
             }
         });
 
@@ -229,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("POSTLIST", postList);
+        outState.putInt("COUNT", count);
         Log.d("LIST salvaa ", postList.toString() );
     }
 

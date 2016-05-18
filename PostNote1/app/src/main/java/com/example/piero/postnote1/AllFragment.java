@@ -1,11 +1,10 @@
 package com.example.piero.postnote1;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Movie;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AllFragment extends Fragment {
@@ -86,15 +84,12 @@ public class AllFragment extends Fragment {
         if(!allList.isEmpty()){
             if(position < allList.size()){
                 allList.set(position, postItem);
-                Log.d("set ", allList.get(position).toString());
             }else {
                 allList.add(postItem);
-                Log.d("set ", allList.get(position).toString());
             }
         }else {
             allList.add(postItem);
         }
-
     }
 
     @Override

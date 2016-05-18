@@ -9,6 +9,19 @@ import java.io.Serializable;
 public class PostItem implements Parcelable, Serializable {
     private String titolo,testo, creationDate;
     private int id;
+    private String audioPosition;
+
+    public void setCreationDate(String date){
+        creationDate = date;
+    }
+
+    public String getPosizioneAudio(){
+        return  audioPosition;
+    }
+
+    public void setPosizioneAudio(String audioPosition){
+        this.audioPosition = audioPosition;
+    }
 
     public PostItem() {
         this.titolo = "";

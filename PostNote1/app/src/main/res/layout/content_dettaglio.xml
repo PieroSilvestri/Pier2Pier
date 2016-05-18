@@ -68,19 +68,38 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bottone"
+            android:text="Photo"
             android:layout_weight="1"
             android:id="@+id/foto" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bottone"
+            android:text="Audio"
             android:layout_weight="1"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/foto"
             android:id="@+id/audio" />
 
     </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Listen"
+        android:id="@+id/listen"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/listening"
+        android:layout_above="@+id/postTitle"
+        android:layout_alignLeft="@+id/date"
+        android:layout_alignStart="@+id/date" />
 
 </RelativeLayout>
