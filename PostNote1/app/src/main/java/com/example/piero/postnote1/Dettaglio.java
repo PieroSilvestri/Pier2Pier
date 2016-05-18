@@ -15,15 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.SequenceInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -41,7 +36,8 @@ public class Dettaglio extends AppCompatActivity {
     private String myID;
     private PostItem postItem;
     private TextView date;
-    DatabaseHelper myDB;
+    private DatabaseHelper myDB;
+    private Button listen;
 
     private String posizione;
     private String posizioneTemp;
@@ -60,6 +56,7 @@ public class Dettaglio extends AppCompatActivity {
             startRecording();
         } else {
             stopRecording();
+
         }
     }
 
@@ -104,9 +101,14 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     private void stopRecording() {
-        mRecorder.stop();
+        try{
+            mRecorder.stop();
+        }catch(RuntimeException stopException){
+            stopException.printStackTrace();
+        }
         mRecorder.release();
         mRecorder = null;
+        listen.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -114,7 +116,6 @@ public class Dettaglio extends AppCompatActivity {
         super.onBackPressed();
         setResult(0, new Intent(Dettaglio.this, MainActivity.class));
         finish();
-
     }
 
     @Override
@@ -124,12 +125,13 @@ public class Dettaglio extends AppCompatActivity {
         setContentView(R.layout.activity_dettaglio);
 
         myDB = new DatabaseHelper(this);
-
-
         imageView = (ImageView) findViewById(R.id.ivImage);
-
         eliminaFoto = (Button) findViewById(R.id.eliminaFoto);
-
+        titolo = (EditText)findViewById(R.id.postTitle);
+        text1 = (EditText)findViewById(R.id.editText);
+        date = (TextView)findViewById(R.id.date);
+        listen = (Button) findViewById(R.id.listen);
+        listen.setVisibility(View.INVISIBLE);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
             Log.d("NOTICEMESENPAI", "Diverso da null");
@@ -142,14 +144,13 @@ public class Dettaglio extends AppCompatActivity {
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
+            listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID");
         }
 
-        titolo = (EditText)findViewById(R.id.postTitle);
-        text1 = (EditText)findViewById(R.id.editText);
-        date = (TextView)findViewById(R.id.date);
+
 
         if(postItem == null){
             titolo.setHint("Inserisci qua il titolo");
@@ -206,6 +207,7 @@ public class Dettaglio extends AppCompatActivity {
         final Button recordAudio = (Button) findViewById(R.id.audio);
         recordAudio.setOnClickListener(new View.OnClickListener() {
             boolean mStartRecording = true;
+
             @Override
             public void onClick(View v) {
 
@@ -221,8 +223,6 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        Button listen = (Button) findViewById(R.id.listen);
-        listen.setClickable(false);
         listen.setOnClickListener(new View.OnClickListener() {
             boolean mStartPlaying = true;
 
@@ -329,41 +329,6 @@ public class Dettaglio extends AppCompatActivity {
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
     }
 
-    /*
-    * @String message
-    * Questo metodo permette di  annullare o tornare indietro durante la detail activity
-    * */
-
-    private  static void saveAudio(String oldAudio, String newAudio) throws IOException {
-        //postItem.getPosizioneAudio(), posizioneTemp
-        long timeStart = System.currentTimeMillis();
-        FileInputStream fistream1 = null;
-        try {
-            fistream1 = new FileInputStream(oldAudio);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        FileInputStream fistream2 = new FileInputStream(newAudio);
-        SequenceInputStream sistream = new SequenceInputStream(fistream1, fistream2);
-        FileOutputStream fostream = new FileOutputStream(oldAudio);
-
-        int temp;
-
-        while( ( temp = sistream.read() ) != -1)
-        {
-
-            fostream.write(temp);
-        }
-        fostream.close();
-        sistream.close();
-        fistream1.close();
-        fistream2.close();
-        long timeEnd= System.currentTimeMillis();
-
-        Log.e("merge timer:", "milli seconds:" + (timeEnd - timeStart));
-
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -404,4 +369,5 @@ public class Dettaglio extends AppCompatActivity {
         outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
     }
+
 }

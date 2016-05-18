@@ -4,6 +4,7 @@ package com.example.piero.postnote1;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -177,7 +178,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.setCancelable(true);
         builder.setTitle(title);
         builder.setMessage(message);
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
         builder.show();
+        
     }
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){
