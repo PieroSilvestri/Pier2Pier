@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -244,7 +245,7 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        Button annulla = (Button) findViewById(R.id.detailAnnulla);
+        ImageButton annulla = (ImageButton) findViewById(R.id.detailAnnulla);
         annulla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
