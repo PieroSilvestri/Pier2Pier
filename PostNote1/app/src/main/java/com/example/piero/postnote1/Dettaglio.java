@@ -68,10 +68,18 @@ public class Dettaglio extends AppCompatActivity {
 
     private void startPlaying() {
         mPlayer = new MediaPlayer();
+        double now = System.currentTimeMillis();
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
+
+            mPlayer.getDuration();
+            if(System.currentTimeMillis() - now > mPlayer.getDuration()){
+                mPlayer.release();
+                mPlayer = null;
+            }
+
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
@@ -222,7 +230,7 @@ public class Dettaglio extends AppCompatActivity {
 
             public void onClick(View v) {
                 onPlay(mStartPlaying);
-                mStartPlaying = !mStartPlaying;
+               // mStartPlaying = !mStartPlaying;
             }
 
         });

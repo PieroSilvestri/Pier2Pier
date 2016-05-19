@@ -1,8 +1,10 @@
 package com.example.piero.postnote1;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,8 @@ public class AllFragment extends Fragment {
     private static ArrayList<PostItem> allList = new ArrayList<PostItem>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
+    private DatabaseHelper myDB;
+    private String myID;
     public String TAGCICLO = "CICLODIVITA";
 
     public AllFragment() {
@@ -144,10 +149,30 @@ public class AllFragment extends Fragment {
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Attenzione");
+                builder.setMessage("Vuoi cancellare questa nota?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //allList.remove(position);
+                        Log.d("Position", String.valueOf(position));
+                        myID = String.valueOf(position);
+                        //DeleteData();
+                        //UpdateList();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 
+                    }
+                });
+                builder.show();
             }
         }));
+
+
 
         return rootView;
     }
@@ -241,6 +266,17 @@ public class AllFragment extends Fragment {
     public static void UpdateList() {
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void DeleteData(){
+        Log.d("Position", myID);
+        Integer deleteRows = myDB.deleteData(myID);
+        if(deleteRows > 0){
+            Toast.makeText(getActivity(), "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
+        }
     }
 
 }
