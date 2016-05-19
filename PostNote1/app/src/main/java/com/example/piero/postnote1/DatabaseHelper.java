@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABSE_NAME = "Post1.db";
+    public static final String DATABSE_NAME = "Post.db";
     public static final String TABLE_NAME = "post_table";
     public static final String COL_ID = "ID";
     public static final String COL_TITOLO = "TITOLO";
@@ -65,14 +65,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean updateData(String id, String titolo, String testo, String date){
+    public boolean updateData(String id, String titolo, String testo){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValue = new ContentValues();
 
         contentValue.put(COL_ID, id);
         contentValue.put(COL_TITOLO, titolo);
         contentValue.put(COL_TESTO, testo);
-        contentValue.put(COL_DATE, date);
 
         db.update(TABLE_NAME, contentValue, "id = ?",new String[] { id });
 

@@ -46,6 +46,7 @@ public class Dettaglio extends AppCompatActivity {
     private TextView date;
     private DatabaseHelper myDB;
     private Button listen;
+    private static String CorrectData;
 
     private String posizione;
     private String posizioneTemp;
@@ -163,8 +164,10 @@ public class Dettaglio extends AppCompatActivity {
             text1.setHint("Inserisci qua il contenuto");
             mFileName = posizione + id + ".mp3";
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm");
+            SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String formattedDate = df.format(c.getTime());
+            CorrectData = formattedDate.replaceAll("/", "").replaceAll(":","").replaceAll(" ","");
+            Log.d("WTF?", CorrectData);
             String data = ("Creazione: \n" + formattedDate);
             date.setText(data);
         } else {
@@ -178,7 +181,9 @@ public class Dettaglio extends AppCompatActivity {
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
-            imageView.setImageBitmap(loadBitmap(getApplicationContext(), String.valueOf(myID)));
+            String fixedCreationDate = postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
+            Log.d("WTF?", fixedCreationDate);
+            imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
         setTitle("" + titolo.getText());
         Button save = (Button) findViewById(R.id.Save);
@@ -281,8 +286,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(),
-                date.getText().toString());
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -292,8 +296,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(),
-                date.getText().toString());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString());
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -332,7 +335,7 @@ public class Dettaglio extends AppCompatActivity {
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
                 //String nomeFile = "test";
-                //saveFile(getApplicationContext(), bitmap, nomeFile);
+                saveFile(getApplicationContext(), bitmap, CorrectData);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -342,6 +345,9 @@ public class Dettaglio extends AppCompatActivity {
 
     public static void saveFile(Context context, Bitmap b, String picName){
         FileOutputStream fos;
+        if(b ==null){
+            return;
+        }
         try {
             fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
             b.compress(Bitmap.CompressFormat.PNG, 100, fos);
