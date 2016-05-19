@@ -175,6 +175,8 @@ public class Dettaglio extends AppCompatActivity {
             else
                 mFileName = postItem.getPosizioneAudio();
             date.setText(postItem.getcreationDate());
+            String nome = postItem.getcreationDate();
+            Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), String.valueOf(myID)));
         }
@@ -329,8 +331,8 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                String nomeFile = String.valueOf(postItem.getId());
-                saveFile(getApplicationContext(), bitmap, nomeFile);
+                //String nomeFile = "test";
+                //saveFile(getApplicationContext(), bitmap, nomeFile);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);

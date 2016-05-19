@@ -120,7 +120,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToDetailFromButtonNew(postList.get(postList.size()-1).getId(), true);
+                if(postList.size() != 0){
+                    goToDetailFromButtonNew(postList.get(postList.size()-1).getId(), true);
+                }else{
+                    goToDetailFromButtonNew(postList.size(), true);
+                }
             }
         });
 
