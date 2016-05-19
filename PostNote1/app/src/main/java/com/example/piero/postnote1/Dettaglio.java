@@ -154,6 +154,8 @@ public class Dettaglio extends AppCompatActivity {
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
+            if (postItem.getPosizioneAudio() != null)
+                listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
