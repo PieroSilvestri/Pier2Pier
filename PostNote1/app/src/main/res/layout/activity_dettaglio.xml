@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltv"
@@ -100,29 +102,40 @@
 
     </RelativeLayout>
 </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:id="@+id/linearLayout">
+
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Add Photo"
         android:layout_alignParentBottom="true"
-        android:id="@+id/foto" />
+        android:id="@+id/foto"
+        android:layout_weight="1" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Add Audio"
         android:id="@+id/audio"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/foto"
-        android:layout_toEndOf="@+id/foto" />
+        android:layout_toEndOf="@+id/foto"
+        android:layout_weight="1" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Save"
         android:layout_toRightOf="@+id/audio"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:id="@+id/Save" />
+        android:id="@+id/Save"
+        android:layout_weight="1" />
 
+    </LinearLayout>
 </RelativeLayout>
