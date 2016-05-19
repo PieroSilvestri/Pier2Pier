@@ -1,7 +1,6 @@
 package com.example.piero.postnote1;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,14 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class Dettaglio extends AppCompatActivity {
@@ -72,6 +69,7 @@ public class Dettaglio extends AppCompatActivity {
 
     private void onPlay(boolean start) {
         if (start) {
+            stopPlaying();
             startPlaying();
         } else {
             stopPlaying();
@@ -80,17 +78,25 @@ public class Dettaglio extends AppCompatActivity {
 
     private void startPlaying() {
         mPlayer = new MediaPlayer();
+        double now = System.currentTimeMillis();
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
+
+            if(System.currentTimeMillis() - now > mPlayer.getDuration()){
+                mPlayer.release();
+                mPlayer = null;
+            }
+
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
     }
 
     private void stopPlaying() {
-        mPlayer.release();
+        if(mPlayer != null)
+             mPlayer.release();
         mPlayer = null;
     }
 
@@ -141,18 +147,21 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
+        listen.setVisibility(View.INVISIBLE);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }
-
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
+            if (postItem.getPosizioneAudio() != null)
+                listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
-            listen.setVisibility(View.VISIBLE);
+            if (postItem.getPosizioneAudio() != null)
+                 listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
@@ -246,7 +255,7 @@ public class Dettaglio extends AppCompatActivity {
 
             public void onClick(View v) {
                 onPlay(mStartPlaying);
-                mStartPlaying = !mStartPlaying;
+               // mStartPlaying = !mStartPlaying;
             }
 
         });

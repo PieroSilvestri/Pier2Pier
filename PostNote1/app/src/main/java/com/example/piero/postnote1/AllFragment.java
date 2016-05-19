@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,13 +23,13 @@ import java.util.ArrayList;
 
 public class AllFragment extends Fragment {
 
-    private static ArrayList<PostItem> allList = new ArrayList<PostItem>();
+    private static ArrayList<PostItem> allList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
+    private DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
     Dettaglio dettaglio;
-    DatabaseHelper myDB;
 
     public AllFragment() {
         // Required empty public constructor
@@ -82,10 +81,6 @@ public class AllFragment extends Fragment {
     }
 
 
-    public ArrayList<PostItem> getAllList(){
-        return allList;
-    }
-
     public void addToList(PostItem postItem, int position){
 
         if(!allList.isEmpty()){
@@ -117,8 +112,6 @@ public class AllFragment extends Fragment {
         Log.d(TAGCICLO, "onCreateView");
         if (allList.isEmpty()){
             allList = getArguments().getParcelableArrayList("postList");
-        } else {
-
         }
 
         if(savedInstanceState != null)
@@ -160,12 +153,14 @@ public class AllFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
                 builder.setTitle("Attenzione");
-                builder.setMessage("Vuoi cancellare sta roba?");
+                builder.setMessage("Vuoi cancellare questa nota?");
                 builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //allList.remove(position);
                         Log.d("Position", String.valueOf(position));
                         myID = String.valueOf(position);
+                        DeleteData();
+                        //UpdateList();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -175,10 +170,9 @@ public class AllFragment extends Fragment {
                     }
                 });
                 builder.show();
-                AlertDialog d = builder.create();
+                builder.create();
             }
         }));
-
         return rootView;
     }
 
@@ -275,6 +269,15 @@ public class AllFragment extends Fragment {
     }
 
 
-
+    public void DeleteData(){
+        Log.d("Position", myID);
+        Integer deleteRows = myDB.deleteData(myID);
+        if(deleteRows > 0){
+            Toast.makeText(getActivity(), "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
+        }
+    }
 
 }
