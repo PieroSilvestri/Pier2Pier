@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
-    DatabaseHelper myDB;
+    private DatabaseHelper myDB1;
+    private String myID;
     private AllFragment fragment;
     private int count;
 
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myDB = new DatabaseHelper(this);
+        myDB1 = new DatabaseHelper(this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,8 +120,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btnLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToDetailFromButtonNew(count, true);
-                count++;
+                if(postList.size() != 0){
+                    goToDetailFromButtonNew(postList.get(postList.size()-1).getId(), true);
+                }else{
+                    goToDetailFromButtonNew(postList.size(), true);
+                }
             }
         });
 
@@ -146,13 +151,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment.UpdateList();
             }
         }
-
     }
+
 
     public void viewAll(){
         PostItem post;
         postList.clear();
-        Cursor res = myDB.getAllData();
+        Cursor res = myDB1.getAllData();
         if(res.getCount() == 0){
             showMessage("Error", "Lista vuota");
             return;
@@ -170,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
              */
         }
-
     }
+
 
     public void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         builder.show();
-        
+
     }
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){

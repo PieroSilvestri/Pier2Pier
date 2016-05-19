@@ -23,12 +23,13 @@ import java.util.ArrayList;
 
 public class AllFragment extends Fragment {
 
-    private static ArrayList<PostItem> allList = new ArrayList<PostItem>();
+    private static ArrayList<PostItem> allList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
     private DatabaseHelper myDB;
-    private String myID;
     public String TAGCICLO = "CICLODIVITA";
+    private String myID = "";
+    Dettaglio dettaglio;
 
     public AllFragment() {
         // Required empty public constructor
@@ -80,10 +81,6 @@ public class AllFragment extends Fragment {
     }
 
 
-    public ArrayList<PostItem> getAllList(){
-        return allList;
-    }
-
     public void addToList(PostItem postItem, int position){
 
         if(!allList.isEmpty()){
@@ -109,12 +106,14 @@ public class AllFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
+        myDB = new DatabaseHelper(getActivity().getApplication());
+        dettaglio = new Dettaglio();
+
         Log.d(TAGCICLO, "onCreateView");
         if (allList.isEmpty()){
             allList = getArguments().getParcelableArrayList("postList");
-        } else {
-
         }
+
         if(savedInstanceState != null)
             allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
         allList = getArguments().getParcelableArrayList("postList");
@@ -133,6 +132,7 @@ public class AllFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
         recyclerView.setAdapter(mAdapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
@@ -143,7 +143,7 @@ public class AllFragment extends Fragment {
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
-                bundle.putInt("ID", position);
+                bundle.putInt("ID", allList.get(position).getId());
                 //startActivity(i.putExtras(bundle));
                 startActivityForResult(i.putExtras(bundle), 10);
             }
@@ -159,21 +159,20 @@ public class AllFragment extends Fragment {
                         //allList.remove(position);
                         Log.d("Position", String.valueOf(position));
                         myID = String.valueOf(position);
-                        //DeleteData();
+                        DeleteData();
                         //UpdateList();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
                     }
                 });
                 builder.show();
+                builder.create();
             }
         }));
-
-
-
         return rootView;
     }
 
@@ -257,6 +256,7 @@ public class AllFragment extends Fragment {
 
         }
 
+
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -267,6 +267,7 @@ public class AllFragment extends Fragment {
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
     }
+
 
     public void DeleteData(){
         Log.d("Position", myID);

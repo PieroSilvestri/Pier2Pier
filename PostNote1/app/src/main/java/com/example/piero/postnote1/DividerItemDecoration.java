@@ -50,8 +50,9 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
-        final int left = parent.getPaddingLeft();
-        final int right = parent.getWidth() - parent.getPaddingRight();
+        final int left = parent.getPaddingLeft() + 35;
+        final int right = parent.getWidth() - parent.getPaddingRight() - 35;
+
 
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -59,7 +60,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mDivider.getIntrinsicHeight();
+            //final int bottom = top + mDivider.getIntrinsicHeight();
+            final int bottom = top + 16;
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }

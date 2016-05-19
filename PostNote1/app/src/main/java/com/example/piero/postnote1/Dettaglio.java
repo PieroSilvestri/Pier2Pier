@@ -1,7 +1,10 @@
 package com.example.piero.postnote1;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -11,12 +14,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
 
 public class Dettaglio extends AppCompatActivity {
     private static final String POST = "POST";
@@ -36,6 +47,7 @@ public class Dettaglio extends AppCompatActivity {
     private TextView date;
     private DatabaseHelper myDB;
     private Button listen;
+    private static String CorrectData;
 
     private String posizione;
     private String posizioneTemp;
@@ -137,10 +149,8 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
-        listen.setVisibility(View.INVISIBLE);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
-            Log.d("NOTICEMESENPAI", "Diverso da null");
         }
 
         if(savedInstanceState != null) {
@@ -153,7 +163,7 @@ public class Dettaglio extends AppCompatActivity {
             listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
-            id = getIntent().getExtras().getInt("ID");
+            id = getIntent().getExtras().getInt("ID") + 1;
         }
 
 
@@ -162,7 +172,13 @@ public class Dettaglio extends AppCompatActivity {
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
             mFileName = posizione + id + ".mp3";
-            date.setText("" + new Date());
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            String formattedDate = df.format(c.getTime());
+            CorrectData = formattedDate.replaceAll("/", "").replaceAll(":","").replaceAll(" ","");
+            Log.d("WTF?", CorrectData);
+            String data = ("Creazione: \n" + formattedDate);
+            date.setText(data);
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
@@ -170,8 +186,16 @@ public class Dettaglio extends AppCompatActivity {
                 mFileName = posizione + postItem.getId() + ".mp3";
             else
                 mFileName = postItem.getPosizioneAudio();
-            date.setText(postItem.getcreationDate());
+            String testoTW = postItem.getcreationDate();
+            String testoMod = "Creazione: \n" + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
+            Log.d("MACOMEEEE", testoMod);
+            date.setText(testoMod);
+            String nome = postItem.getcreationDate();
+            Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
+            String fixedCreationDate = postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
+            Log.d("WTF?", fixedCreationDate);
+            imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
         setTitle("" + titolo.getText());
         Button save = (Button) findViewById(R.id.Save);
@@ -185,7 +209,7 @@ public class Dettaglio extends AppCompatActivity {
                 }
                 else{
                     UpdateDate();
-                };
+                }
 
 //                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() ,"" ,  postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
@@ -201,7 +225,7 @@ public class Dettaglio extends AppCompatActivity {
                 bundle.putInt(ID, id);
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);*/
-
+                bitmap = null;
                 finish();
             }
         });
@@ -252,7 +276,7 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        Button annulla = (Button) findViewById(R.id.detailAnnulla);
+        ImageButton annulla = (ImageButton) findViewById(R.id.detailAnnulla);
         annulla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,15 +292,13 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onPickImage();
-                //galleryAddPic();
                 Log.d("PRESSED", "Premut");
             }
         });
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(),
-                date.getText().toString());
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -286,8 +308,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(),
-                date.getText().toString());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString());
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -306,6 +327,16 @@ public class Dettaglio extends AppCompatActivity {
             Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
         }
     }
+    public void DeleteDataFragment(String id){
+        Integer deleteRows = myDB.deleteData(id);
+        if(deleteRows > 0){
+            Toast.makeText(Dettaglio.this, "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
 
 
@@ -315,7 +346,8 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                eliminaFoto.setVisibility(View.VISIBLE);
+                //String nomeFile = "test";
+                saveFile(getApplicationContext(), bitmap, CorrectData);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -323,10 +355,51 @@ public class Dettaglio extends AppCompatActivity {
         }
     }
 
+    public static void saveFile(Context context, Bitmap b, String picName){
+        FileOutputStream fos;
+        if(b ==null){
+            return;
+        }
+        try {
+            fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        }
+        catch (FileNotFoundException e) {
+            Log.d("CANCELLATO", "file not found");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.d("CANCELLATO", "io exception");
+            e.printStackTrace();
+        }
+    }
+
+    public static Bitmap loadBitmap(Context context, String picName){
+        Bitmap b = null;
+        FileInputStream fis;
+        try {
+            fis = context.openFileInput(picName);
+            b = BitmapFactory.decodeStream(fis);
+            fis.close();
+
+        }
+        catch (FileNotFoundException e) {
+            Log.d("CARICATO", "file not found");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.d("CARICATO", "io exception");
+            e.printStackTrace();
+        }
+        return b;
+    }
+
 
 
 
     public void onPickImage() {
+        Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
     }
