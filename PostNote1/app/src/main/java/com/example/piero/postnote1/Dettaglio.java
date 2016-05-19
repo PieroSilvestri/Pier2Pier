@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class Dettaglio extends AppCompatActivity {
@@ -177,7 +178,10 @@ public class Dettaglio extends AppCompatActivity {
                 mFileName = posizione + postItem.getId() + ".mp3";
             else
                 mFileName = postItem.getPosizioneAudio();
-            date.setText(postItem.getcreationDate());
+            String testoTW = postItem.getcreationDate();
+            String testoMod = "Creazione: \n" + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
+            Log.d("MACOMEEEE", testoMod);
+            date.setText(testoMod);
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
