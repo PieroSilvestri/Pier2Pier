@@ -318,8 +318,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         //mAdapter.animateTo(filteredModelList);
         mAdapter.setPostList(filteredModelList);
 
+        recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
-        recyclerView.scrollToPosition(0);
         return false;
     }
 
