@@ -7,21 +7,29 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class AllFragment extends Fragment {
+public class AllFragment extends Fragment implements SearchView.OnQueryTextListener {
+
+    public static AllFragment newInstance() {return new AllFragment();};
 
     private static ArrayList<PostItem> allList = new ArrayList<>();
     private static RecyclerView recyclerView;
@@ -45,6 +53,7 @@ public class AllFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAGCICLO, "On Create");
+        setHasOptionsMenu(true);
     }
 
     public static AllFragment getIstance(){
@@ -53,6 +62,28 @@ public class AllFragment extends Fragment {
 
 
     private static final String TAG = "RecyclerViewFragment";
+
+    /*public void onPrepareOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(getActivity().getApplicationContext());
+
+        menu.clear();
+
+        super.onPrepareOptionsMenu(menu);
+        inflater.inflate(R.menu.main, menu);
+    }*/
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.main, menu);
+        Log.d("MAFUNZIONA", "Pare di sì");
+
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+        //super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -278,6 +309,34 @@ public class AllFragment extends Fragment {
         else{
             Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        Log.d("MAFUNZIONA", query);
+        final List<PostItem> filteredModelList = filter(allList, query);
+        //mAdapter.animateTo(filteredModelList);
+        mAdapter.setPostList(filteredModelList);
+
+        mAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(0);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) { return false; }
+
+    private List<PostItem> filter(List<PostItem> models, String query) {
+        query = query.toLowerCase();
+
+        final List<PostItem> filteredModelList = new ArrayList<>();
+        for (PostItem model : models) {
+            final String text = model.getTitolo().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
 }
