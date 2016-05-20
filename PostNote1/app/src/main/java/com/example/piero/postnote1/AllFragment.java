@@ -32,6 +32,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     public static AllFragment newInstance() {return new AllFragment();};
 
     private static ArrayList<PostItem> allList = new ArrayList<>();
+    private static List<PostItem> filteredModelList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
     private DatabaseHelper myDB;
@@ -170,7 +171,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
             @Override
             public void onClick(View view, int position) {
                 Log.d("TAG", "" + position);
-                PostItem item = allList.get(position);
+                PostItem item = filteredModelList.get(position);
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
@@ -314,7 +315,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     @Override
     public boolean onQueryTextChange(String query) {
         Log.d("MAFUNZIONA", query);
-        final List<PostItem> filteredModelList = filter(allList, query);
+        filteredModelList = filter(allList, query);
+        //allList = getArguments().getParcelableArrayList("postList");
         //mAdapter.animateTo(filteredModelList);
         mAdapter.setPostList(filteredModelList);
 
