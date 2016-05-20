@@ -1,29 +1,43 @@
 package com.example.piero.postnote1;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class AllFragment extends Fragment {
+public class AllFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    private static ArrayList<PostItem> allList = new ArrayList<PostItem>();
+    public static AllFragment newInstance() {return new AllFragment();};
+
+    private static ArrayList<PostItem> allList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
+    private DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
+    private String myID = "";
+    Dettaglio dettaglio;
 
     public AllFragment() {
         // Required empty public constructor
@@ -39,6 +53,7 @@ public class AllFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAGCICLO, "On Create");
+        setHasOptionsMenu(true);
     }
 
     public static AllFragment getIstance(){
@@ -47,6 +62,28 @@ public class AllFragment extends Fragment {
 
 
     private static final String TAG = "RecyclerViewFragment";
+
+    /*public void onPrepareOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(getActivity().getApplicationContext());
+
+        menu.clear();
+
+        super.onPrepareOptionsMenu(menu);
+        inflater.inflate(R.menu.main, menu);
+    }*/
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.main, menu);
+        Log.d("MAFUNZIONA", "Pare di sì");
+
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+        //super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -75,10 +112,6 @@ public class AllFragment extends Fragment {
     }
 
 
-    public ArrayList<PostItem> getAllList(){
-        return allList;
-    }
-
     public void addToList(PostItem postItem, int position){
 
         if(!allList.isEmpty()){
@@ -104,12 +137,14 @@ public class AllFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
+        myDB = new DatabaseHelper(getActivity().getApplication());
+        dettaglio = new Dettaglio();
+
         Log.d(TAGCICLO, "onCreateView");
         if (allList.isEmpty()){
             allList = getArguments().getParcelableArrayList("postList");
-        } else {
-
         }
+
         if(savedInstanceState != null)
             allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
         allList = getArguments().getParcelableArrayList("postList");
@@ -139,17 +174,36 @@ public class AllFragment extends Fragment {
                 Intent i = new Intent(getActivity(), Dettaglio.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
-                bundle.putInt("ID", position);
+                bundle.putInt("ID", allList.get(position).getId());
                 //startActivity(i.putExtras(bundle));
                 startActivityForResult(i.putExtras(bundle), 10);
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Attenzione");
+                builder.setMessage("Vuoi cancellare questa nota?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //allList.remove(position);
+                        Log.d("Position", String.valueOf(position));
+                        myID = String.valueOf(position);
+                        DeleteData();
+                        //UpdateList();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+                builder.show();
+                builder.create();
             }
         }));
-
         return rootView;
     }
 
@@ -233,6 +287,7 @@ public class AllFragment extends Fragment {
 
         }
 
+
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -242,6 +297,46 @@ public class AllFragment extends Fragment {
     public static void UpdateList() {
         recyclerView.scrollToPosition(allList.size()-1);
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    public void DeleteData(){
+        Log.d("Position", myID);
+        Integer deleteRows = myDB.deleteData(myID);
+        if(deleteRows > 0){
+            Toast.makeText(getActivity(), "Data Delete", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        Log.d("MAFUNZIONA", query);
+        final List<PostItem> filteredModelList = filter(allList, query);
+        //mAdapter.animateTo(filteredModelList);
+        mAdapter.setPostList(filteredModelList);
+
+        recyclerView.scrollToPosition(allList.size()-1);
+        mAdapter.notifyDataSetChanged();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) { return false; }
+
+    private List<PostItem> filter(List<PostItem> models, String query) {
+        query = query.toLowerCase();
+
+        final List<PostItem> filteredModelList = new ArrayList<>();
+        for (PostItem model : models) {
+            final String text = model.getTitolo().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
 }
