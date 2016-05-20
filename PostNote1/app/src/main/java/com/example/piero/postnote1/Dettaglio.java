@@ -261,7 +261,7 @@ public class Dettaglio extends AppCompatActivity {
         });
 
 
-        Button delete = (Button)findViewById(R.id.detailDelete);
+        ImageButton delete = (ImageButton)findViewById(R.id.detailDelete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
