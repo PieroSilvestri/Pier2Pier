@@ -198,6 +198,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                         UpdateList();
                         Log.d("WEYY", "" + allList.size());
                         Log.d("WEYY", "" + filteredModelList.size());
+                        filteredModelList = allList;
 
                     }
                 });
