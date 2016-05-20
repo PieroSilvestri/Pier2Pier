@@ -150,9 +150,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
             allList = (ArrayList<PostItem>) savedInstanceState.getSerializable("ALLLIST");
         allList = getArguments().getParcelableArrayList("postList");
 
-
-        Log.d("Hey, listen", "" + allList);
-
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
 
         mAdapter = new PostAdapter(allList);
@@ -218,6 +215,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     public void onResume() {
         super.onResume();
         Log.d(TAGCICLO, "onResume");
+        Log.d("Hey, listen", "" + allList.size());
+        filteredModelList = allList;
     }
 
     @Override
@@ -230,6 +229,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     public void onStop() {
         super.onStop();
         Log.d(TAGCICLO, "onStop");
+
     }
 
     @Override
