@@ -191,9 +191,14 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                         //allList.remove(position);
                         Log.d("Position", String.valueOf(position));
                         String posizione = String.valueOf(position);
-                        myID = String.valueOf(allList.get(position).getId());
+                        myID = String.valueOf(filteredModelList.get(position).getId());
                         DeleteData(myID);
-                        //UpdateList();
+                        allList.remove(position);
+                        filteredModelList = allList;
+                        UpdateList();
+                        Log.d("WEYY", "" + allList.size());
+                        Log.d("WEYY", "" + filteredModelList.size());
+
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -300,7 +305,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     }
 
     public static void UpdateList() {
-        recyclerView.scrollToPosition(allList.size()-1);
+        recyclerView.scrollToPosition(allList.size() - 1);
         mAdapter.notifyDataSetChanged();
     }
 
