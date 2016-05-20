@@ -60,9 +60,11 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ID">
+        android:layout_below="@+id/ID"
+        android:layout_alignRight="@+id/ID"
+        android:layout_alignEnd="@+id/ID">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -75,16 +77,16 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView3"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_next"
-            android:tint="#b5a9a9" />
+            android:id="@+id/flag"
+            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/flag"
-            android:layout_weight="1" />
+            android:id="@+id/imageView3"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_next"
+            android:tint="#b5a9a9" />
     </LinearLayout>
 
     <!--<TextView-->

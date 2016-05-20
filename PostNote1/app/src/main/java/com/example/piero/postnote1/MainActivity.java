@@ -27,7 +27,7 @@ import java.util.Calendar;
 
 ;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d("IO ARRIVO", "QUI!!");
         //codice di piero per caricamento lista
         viewAll();
         fragment.UpdateList();
@@ -189,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         builder.show();
-
     }
 
     public void goToDetailFromButtonNew(int size, boolean nuovo){
@@ -197,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bundle.putInt(ID, size);
         bundle.putString("NUOVO", "NUOVO");
         startActivityForResult(new Intent(MainActivity.this, Dettaglio.class).putExtras(bundle), 10);
-
     }
 
     public void dettaglio(String value, int id){
@@ -208,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         openPage1.putExtras(bundle);
         startActivity(openPage1);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -274,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(outState);
         outState.putSerializable("POSTLIST", postList);
         outState.putInt("COUNT", count);
-        Log.d("LIST salvaa ", postList.toString() );
+        Log.d("LIST salvaa ", postList.toString());
     }
 
 }

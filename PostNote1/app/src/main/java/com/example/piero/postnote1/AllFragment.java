@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -35,14 +36,16 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     private static List<PostItem> filteredModelList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
-    private DatabaseHelper myDB;
+    DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
     Dettaglio dettaglio;
 
+
     public AllFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -138,7 +141,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         View rootView = inflater.inflate(R.layout.fragment_all, container, false);
         rootView.setTag(TAG);
 
-        myDB = new DatabaseHelper(getActivity().getApplication());
+        myDB = new DatabaseHelper(getActivity());
         dettaglio = new Dettaglio();
 
         Log.d(TAGCICLO, "onCreateView");
@@ -187,8 +190,9 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                     public void onClick(DialogInterface dialog, int id) {
                         //allList.remove(position);
                         Log.d("Position", String.valueOf(position));
-                        myID = String.valueOf(position);
-                        DeleteData();
+                        String posizione = String.valueOf(position);
+                        myID = String.valueOf(allList.get(position).getId());
+                        DeleteData(myID);
                         //UpdateList();
                     }
                 });
@@ -301,15 +305,29 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     }
 
 
-    public void DeleteData(){
-        Log.d("Position", myID);
-        Integer deleteRows = myDB.deleteData(myID);
+    public void DeleteData(String mioID){
+        Log.d("Position", mioID);
+        Integer deleteRows = myDB.deleteData(mioID);
         if(deleteRows > 0){
             Toast.makeText(getActivity(), "Data Delete", Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        builder.show();
     }
 
     @Override
