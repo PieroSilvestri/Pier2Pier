@@ -58,6 +58,35 @@
         android:layout_marginTop="7dp"
         android:textSize="15dp" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ID">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iconaFoto"
+            android:src="@android:drawable/ic_menu_camera"
+            android:layout_weight="1"
+            android:tint="#b5a9a9" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView3"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_next"
+            android:tint="#b5a9a9" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/flag"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <!--<TextView-->
     <!--android:id="@+id/year"-->
     <!--android:textColor="@color/data"-->

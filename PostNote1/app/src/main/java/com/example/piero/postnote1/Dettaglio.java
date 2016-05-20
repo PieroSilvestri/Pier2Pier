@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ public class Dettaglio extends AppCompatActivity {
 
     private ImageView imageView;
     private static Bitmap bitmap;
-    private Button addFoto;
+    private ImageButton addFoto;
     private Button eliminaFoto;
     private EditText text1;
     private EditText titolo;
@@ -199,7 +200,7 @@ public class Dettaglio extends AppCompatActivity {
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
         setTitle("" + titolo.getText());
-        Button save = (Button) findViewById(R.id.Save);
+        ImageButton save = (ImageButton) findViewById(R.id.Save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,7 +232,7 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        final Button recordAudio = (Button) findViewById(R.id.audio);
+        final ImageButton recordAudio = (ImageButton) findViewById(R.id.audio);
         recordAudio.setOnClickListener(new View.OnClickListener() {
             boolean mStartRecording = true;
 
@@ -240,9 +241,9 @@ public class Dettaglio extends AppCompatActivity {
 
                 onRecord(mStartRecording);
                 if (mStartRecording) {
-                    recordAudio.setText("Stop recording");
+                    recordAudio.setColorFilter(Color.BLACK);
                 } else {
-                    recordAudio.setText("Start recording");
+                    recordAudio.setColorFilter(Color.RED);
                 }
                 mStartRecording = !mStartRecording;
 
@@ -288,7 +289,7 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        addFoto = (Button) findViewById(R.id.foto);
+        addFoto = (ImageButton) findViewById(R.id.foto);
         addFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
