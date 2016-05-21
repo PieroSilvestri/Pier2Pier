@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="130dp"
     android:focusable="true"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -23,7 +23,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="center"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        android:layout_marginRight="20dp" />
 
     <TextView
         android:id="@+id/title"
@@ -63,29 +64,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ID"
-        android:layout_alignRight="@+id/ID"
-        android:layout_alignEnd="@+id/ID">
+        android:layout_alignEnd="@+id/ID"
+        android:layout_alignRight="@+id/view"
+        android:layout_toRightOf="@+id/view"
+        android:layout_toEndOf="@+id/view">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/iconaFoto"
-            android:src="@android:drawable/ic_menu_camera"
+            android:src="@drawable/ic_panorama"
             android:layout_weight="1"
             android:tint="#b5a9a9" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/flag"
-            android:layout_weight="1" />
+            android:id="@+id/audioIcon"
+            android:layout_weight="1"
+            android:src="@drawable/ic_headset"
+            android:tint="#b5a9a9" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView3"
+            android:id="@+id/flag"
             android:layout_weight="1"
-            android:src="@android:drawable/ic_media_next"
+            android:src="@drawable/ic_flag"
             android:tint="#b5a9a9" />
     </LinearLayout>
 
