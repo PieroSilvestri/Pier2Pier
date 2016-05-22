@@ -293,7 +293,7 @@ public class Dettaglio extends AppCompatActivity {
         });
 
         detailTitolo = (TextView) findViewById(R.id.detailTitolo);
-        detailTitolo.setText("" + postItem.getTitolo());
+        detailTitolo.setText("" + detailTitolo.getText());
         setTitle("");
     }
 
