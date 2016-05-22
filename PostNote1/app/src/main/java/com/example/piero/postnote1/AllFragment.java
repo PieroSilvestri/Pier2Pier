@@ -6,12 +6,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +35,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     private static List<PostItem> filteredModelList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
+    private String[] scelte = {"Share", "Delete"};
     DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
@@ -183,31 +183,74 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
             @Override
             public void onLongClick(View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(true);
-                builder.setTitle("Attenzione");
-                builder.setMessage("Vuoi cancellare questa nota?");
-                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //allList.remove(position);
-                        Log.d("Position", String.valueOf(position));
-                        String posizione = String.valueOf(position);
-                        myID = String.valueOf(filteredModelList.get(position).getId());
-                        DeleteData(myID);
-                        allList.remove(position);
-                        filteredModelList = allList;
-                        UpdateList();
-                        Log.d("WEYY", "" + allList.size());
-                        Log.d("WEYY", "" + filteredModelList.size());
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                builder.setTitle("Cosa Desideri fare?")
+                        .setItems(scelte, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0: {
 
-                    }
-                });
-                builder.show();
+
+                                        Intent sendIntent = new Intent();
+                                        PostItem temPostItem = filteredModelList.get(position);
+                                        sendIntent.setAction(Intent.ACTION_SEND);
+                                        sendIntent.putExtra(Intent.EXTRA_TEXT, temPostItem.getTitolo().toUpperCase() + "\n"
+                                                + temPostItem.getTesto());
+                                        sendIntent.setType("text/*"); 
+                                        Log.d("primo", "primo");
+                                        /*if (temPostItem.getPosizioneAudio() != null) {
+                                            sendIntent.setType("audio/*");
+                                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(temPostItem.getPosizioneAudio())));
+                                            Log.d("secondo", "secondo");
+                                        }*/
+
+                                       /* if (temPostItem.getcreationDate() != null && temPostItem.getcreationDate() != "") {
+                                            Uri pictureUri = Uri.parse(temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":", "").replaceAll(" ", "").toString());
+                                            sendIntent.setType("image/*");
+                                            final File photoFile = new File(temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":", "").replaceAll(" ", "").toString());
+                                            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
+
+                                            Log.d("terzo", "terzo");
+                                        }*/
+
+                                        Log.d("fine", "fine");
+                                        startActivity(Intent.createChooser(sendIntent, "Scegli"));
+                                        break;
+
+                                    }
+                                    case 1: {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        builder.setCancelable(true);
+                                        builder.setTitle("Attenzione");
+                                        builder.setMessage("Vuoi cancellare questa nota?");
+                                        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                Log.d("Position", String.valueOf(position));
+                                                myID = String.valueOf(filteredModelList.get(position).getId());
+                                                DeleteData(myID);
+                                                allList.remove(position);
+                                                filteredModelList = allList;
+                                                UpdateList();
+                                                Log.d("WEYY", "" + allList.size());
+                                                Log.d("WEYY", "" + filteredModelList.size());
+                                            }
+                                        });
+                                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                        builder.show();
+                                        builder.create();
+                                    }
+                                }
+                            }
+                        });
                 builder.create();
+                builder.show();
+
             }
         }));
         return rootView;
