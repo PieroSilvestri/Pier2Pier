@@ -184,6 +184,7 @@ public class Dettaglio extends AppCompatActivity {
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
+            CorrectData = postItem.getcreationDate();
             if (postItem.getPosizioneAudio() == null)
                 mFileName = posizione + postItem.getId() + ".mp3";
             else
@@ -348,7 +349,6 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                //String nomeFile = "test";
                 saveFile(getApplicationContext(), bitmap, CorrectData);
                 break;
             default:
