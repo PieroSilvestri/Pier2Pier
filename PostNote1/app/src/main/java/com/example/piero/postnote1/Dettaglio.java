@@ -10,7 +10,10 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +36,7 @@ public class Dettaglio extends AppCompatActivity {
     private static final String LOG_TAG = "AudioRecordTest";
     private static final int CAMERA_REQUEST=1;
 
+    private Toolbar toolbar;
     private ImageView imageView;
     private static Bitmap bitmap;
     private ImageButton addFoto;
@@ -46,6 +50,7 @@ public class Dettaglio extends AppCompatActivity {
     private DatabaseHelper myDB;
     private Button listen;
     private static String CorrectData;
+    private TextView detailTitolo;
 
     private String posizione;
     private String posizioneTemp;
@@ -135,11 +140,16 @@ public class Dettaglio extends AppCompatActivity {
         finish();
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dettaglio);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         myDB = new DatabaseHelper(this);
         imageView = (ImageView) findViewById(R.id.ivImage);
@@ -200,7 +210,7 @@ public class Dettaglio extends AppCompatActivity {
             Log.d("WTF?", fixedCreationDate);
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
-        setTitle("" + titolo.getText());
+
         ImageButton save = (ImageButton) findViewById(R.id.Save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,23 +272,6 @@ public class Dettaglio extends AppCompatActivity {
 
         });
 
-
-        ImageButton delete = (ImageButton)findViewById(R.id.detailDelete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                Log.d("delete", "delete");
-                Intent i = new Intent(Dettaglio.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("ID", id);
-                setResult(99, i.putExtras(bundle));
-                */
-                DeleteData();
-                finish();
-            }
-        });
-
         ImageButton annulla = (ImageButton) findViewById(R.id.detailAnnulla);
         annulla.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +291,10 @@ public class Dettaglio extends AppCompatActivity {
                 Log.d("PRESSED", "Premut");
             }
         });
+
+        detailTitolo = (TextView) findViewById(R.id.detailTitolo);
+        detailTitolo.setText("" + postItem.getTitolo());
+        setTitle("");
     }
 
     public void AddData(){
@@ -445,6 +442,34 @@ public class Dettaglio extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.detail_share) {
+            return true;
+        }
+
+        if (id == R.id.detail_delete) {
+            DeleteData();
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
