@@ -262,6 +262,17 @@ public class Dettaglio extends AppCompatActivity {
         });
 
 
+//        ImageButton playBtn = (ImageButton)findViewById(R.id.play);
+//        playBtn.setOnClickListener(new View.OnClickListener() {
+//            boolean mStartPlaying = true;
+//
+//            public void onClick(View v) {
+//                onPlay(mStartPlaying);
+//                // mStartPlaying = !mStartPlaying;
+//            }
+//
+//        });
+
         ImageButton delete = (ImageButton)findViewById(R.id.detailDelete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,7 +12,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="460dp"
     android:background="#ffffff">
 
     <RelativeLayout
@@ -43,8 +43,7 @@
             android:gravity="start|top"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ivImage"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,26 +56,46 @@
             android:textColor="#d41a1414"
             android:textAlignment="center" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/space2"
-            android:layout_below="@+id/editText" />
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Listen"
             android:id="@+id/listen"
-            android:layout_below="@+id/space2"
-            android:layout_marginTop="10dp" />
+            android:layout_below="@+id/editText" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ivImage"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/postTitle" />
+            android:layout_below="@+id/postTitle"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp" />
+
+        <!--<SeekBar-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:id="@+id/seekBar"-->
+            <!--android:visibility="visible"-->
+            <!--android:layout_below="@+id/ivImage"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_alignRight="@+id/editText"-->
+            <!--android:layout_alignEnd="@+id/editText"-->
+            <!--android:layout_toEndOf="@+id/play"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_toRightOf="@+id/play" />-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/play"-->
+            <!--android:src="@drawable/ic_play_circle_outline_48"-->
+            <!--android:backgroundTint="#ffffff"-->
+            <!--android:tint="#e5666161"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_below="@+id/ivImage" />-->
 
         <Button
             android:id="@+id/eliminaFoto"
@@ -137,7 +156,8 @@
             android:layout_width="1dip"
             android:layout_height="fill_parent"
             android:background="#bcb8b8"
-            />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp" />
 
 
         <ImageButton
@@ -153,7 +173,8 @@
             android:layout_width="1dip"
             android:layout_height="fill_parent"
             android:background="#bcb8b8"
-            />
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp" />
 
 
         <ImageButton
@@ -166,4 +187,5 @@
             android:layout_marginTop="1dp" />
 
     </LinearLayout>
+
 </RelativeLayout>
