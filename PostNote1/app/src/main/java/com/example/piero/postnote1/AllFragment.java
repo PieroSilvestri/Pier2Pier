@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
     private String[] scelte = {"Share", "Delete"};
+    private final Integer[] icons = new Integer[] {R.drawable.ic_menu_share,R.drawable.ic_delete_forever};
     DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
@@ -183,13 +185,12 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
             @Override
             public void onLongClick(View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                ListAdapter adapter = new ArrayAdapterWithIcon(getActivity(), scelte, icons);
                 builder.setTitle("Cosa Desideri fare?")
-                        .setItems(scelte, new DialogInterface.OnClickListener() {
+                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0: {
-
-
                                         Intent sendIntent = new Intent();
                                         PostItem temPostItem = filteredModelList.get(position);
                                         sendIntent.setAction(Intent.ACTION_SEND);
