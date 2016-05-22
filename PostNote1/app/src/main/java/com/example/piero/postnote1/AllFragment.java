@@ -195,7 +195,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                                         sendIntent.setAction(Intent.ACTION_SEND);
                                         sendIntent.putExtra(Intent.EXTRA_TEXT, temPostItem.getTitolo().toUpperCase() + "\n"
                                                 + temPostItem.getTesto());
-                                        sendIntent.setType("text/*"); 
+                                        sendIntent.setType("text/*");
                                         Log.d("primo", "primo");
                                         /*if (temPostItem.getPosizioneAudio() != null) {
                                             sendIntent.setType("audio/*");
