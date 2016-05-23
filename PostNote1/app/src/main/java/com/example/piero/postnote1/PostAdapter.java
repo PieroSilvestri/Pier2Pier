@@ -1,10 +1,13 @@
 package com.example.piero.postnote1;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +19,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titolo, testo, id;
+        public ImageButton importantButton;
 
         public MyViewHolder(View view) {
             super(view);
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
             id = (TextView) view.findViewById(R.id.ID);
+
+            importantButton = (ImageButton) view.findViewById(R.id.importantButton);
         }
 
     }
@@ -42,6 +48,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         holder.testo.setText("" + post.getTesto());
         holder.id.setText("" + post.getId());
         //holder.data.setText(post.getYear());
+
+        final ImageButton important = holder.importantButton;
+        important.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                important.setColorFilter(Color.RED);
+            }
+        });
     }
 
 

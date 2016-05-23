@@ -16,7 +16,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="465dp"
     android:layout_below="@+id/tool_bar"
     android:background="#ffffff">
 
@@ -39,7 +39,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/date"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:gravity="center" />
 
         <EditText
             android:layout_width="match_parent"
@@ -81,7 +82,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/ivImage"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/postTitle" />
+            android:layout_below="@+id/postTitle"
+            android:layout_marginTop="10dp" />
 
         <Button
             android:id="@+id/eliminaFoto"
@@ -98,9 +100,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentBottom="false"
         android:id="@+id/linearLayout"
-        android:background="@drawable/icon_bar_line">
+        android:background="@drawable/icon_bar_line"
+        android:layout_below="@+id/ScrollView01"
+        android:layout_alignBaseline="@+id/ScrollView01">
 
         <ImageButton
             android:layout_width="wrap_content"

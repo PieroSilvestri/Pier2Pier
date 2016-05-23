@@ -189,7 +189,7 @@ public class Dettaglio extends AppCompatActivity {
             String formattedDate = df.format(c.getTime());
             CorrectData = formattedDate.replaceAll("/", "").replaceAll(":","").replaceAll(" ","");
             Log.d("WTF?", CorrectData);
-            String data = ("Creazione: \n" + formattedDate);
+            String data = ("Data: " + formattedDate);
             date.setText(data);
         } else {
             titolo.setText("" + postItem.getTitolo());
@@ -200,7 +200,7 @@ public class Dettaglio extends AppCompatActivity {
             else
                 mFileName = postItem.getPosizioneAudio();
             String testoTW = postItem.getcreationDate();
-            String testoMod = "Creazione: \n" + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
+            String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
             Log.d("MACOMEEEE", testoMod);
             date.setText(testoMod);
             String nome = postItem.getcreationDate();
@@ -252,9 +252,9 @@ public class Dettaglio extends AppCompatActivity {
 
                 onRecord(mStartRecording);
                 if (mStartRecording) {
-                    recordAudio.setColorFilter(Color.BLACK);
-                } else {
                     recordAudio.setColorFilter(Color.RED);
+                } else {
+                    recordAudio.setColorFilter(Color.BLACK);
                 }
                 mStartRecording = !mStartRecording;
 

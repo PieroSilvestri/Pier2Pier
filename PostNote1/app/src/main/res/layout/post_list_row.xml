@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="110dp"
     android:focusable="true"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -31,7 +31,7 @@
         android:textColor="@color/titolo"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/view"
@@ -41,13 +41,17 @@
 
     <TextView
         android:id="@+id/testo"
-        android:layout_width="match_parent"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:maxLength="50"
+        android:ellipsize="end"
+        android:scrollHorizontally="true"
         android:layout_below="@+id/title"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignStart="@+id/title"
         android:layout_marginTop="7dp"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:layout_toRightOf="@+id/view"
+        android:layout_alignLeft="@+id/title" />
 
     <TextView
         android:id="@+id/ID"
@@ -57,41 +61,41 @@
         android:layout_alignLeft="@+id/title"
         android:layout_alignStart="@+id/title"
         android:layout_marginTop="7dp"
-        android:textSize="15dp" />
+        android:textSize="0dp" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ID"
-        android:layout_alignEnd="@+id/ID"
-        android:layout_alignRight="@+id/view"
-        android:layout_toRightOf="@+id/view"
-        android:layout_toEndOf="@+id/view">
+        android:orientation="vertical"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_alignParentRight="true">
+        <!--android:layout_alignEnd="@+id/ID"-->
+        <!--android:layout_toEndOf="@+id/view">-->
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/importantButton"
+            android:src="@drawable/ic_flag"
+            android:tint="#b5a9a9"
+            android:background="#ffffff" />
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/iconaFoto"
             android:src="@drawable/ic_panorama"
             android:layout_weight="1"
             android:tint="#b5a9a9" />
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/audioIcon"
             android:layout_weight="1"
             android:src="@drawable/ic_headset"
             android:tint="#b5a9a9" />
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/flag"
-            android:layout_weight="1"
-            android:src="@drawable/ic_flag"
-            android:tint="#b5a9a9" />
     </LinearLayout>
 
     <!--<TextView-->
