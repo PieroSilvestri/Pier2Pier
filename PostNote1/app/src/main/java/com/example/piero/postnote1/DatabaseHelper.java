@@ -11,12 +11,15 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABSE_NAME = "Post.db";
+    public static final String DATABSE_NAME = "PostABC.db";
     public static final String TABLE_NAME = "post_table";
     public static final String COL_ID = "ID";
     public static final String COL_TITOLO = "TITOLO";
     public static final String COL_TESTO = "TESTO";
     public static final String COL_DATE = "DATE";
+    public static final String COL_AUDIO = "AUDIO";
+    public static final String COL_IMMAGINE = "IMMAGINE";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABSE_NAME, null, 1);
@@ -27,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, TITOLO TEXT, " +
-                "TESTO TEXT, DATE TEXT)";
+                "TESTO TEXT, DATE TEXT, AUDIO INTEGER, IMMAGINE INTEGER)";
         db.execSQL(query);
     }
 
@@ -38,13 +41,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String titolo, String testo, String date) {
+    public boolean insertData(String titolo, String testo, String date, int audio, int immagine) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValue = new ContentValues();
 
         contentValue.put(COL_TITOLO, titolo);
         contentValue.put(COL_TESTO, testo);
         contentValue.put(COL_DATE, date);
+        contentValue.put(COL_AUDIO, audio);
+        contentValue.put(COL_IMMAGINE, immagine);
 
         long result = db.insert(TABLE_NAME, null, contentValue);
 
@@ -66,13 +71,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean updateData(String id, String titolo, String testo){
+    public boolean updateData(String id, String titolo, String testo, int audio, int immagine){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValue = new ContentValues();
 
         contentValue.put(COL_ID, id);
         contentValue.put(COL_TITOLO, titolo);
         contentValue.put(COL_TESTO, testo);
+        contentValue.put(COL_AUDIO, audio);
+        contentValue.put(COL_IMMAGINE, immagine);
+
 
         db.update(TABLE_NAME, contentValue, "id = ?",new String[] { id });
 

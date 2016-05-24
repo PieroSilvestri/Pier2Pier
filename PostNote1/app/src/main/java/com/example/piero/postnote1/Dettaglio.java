@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,6 +45,8 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
+    private int audio = 0;
+    private int img = 0;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -51,17 +54,15 @@ public class Dettaglio extends AppCompatActivity {
     private Button listen;
     private static String CorrectData;
     private TextView detailTitolo;
-
+    private boolean mStartPlaying = true;
     private String posizione;
-    private String posizioneTemp;
     private static String mFileName = null;
 
     private MediaRecorder mRecorder = null;
 
     private MediaPlayer mPlayer = null;
     public Dettaglio(){
-        posizione =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest";
-        posizioneTemp = posizione + "Temp.mp3";
+        posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
     }
 
     private void onRecord(boolean start) {
@@ -90,10 +91,11 @@ public class Dettaglio extends AppCompatActivity {
             mPlayer.prepare();
             mPlayer.start();
 
-            if(System.currentTimeMillis() - now > mPlayer.getDuration()){
+            /*if(System.currentTimeMillis() - now > mPlayer.getDuration()){
                 mPlayer.release();
                 mPlayer = null;
-            }
+                mStartPlaying = true;
+            }*/
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
@@ -128,6 +130,7 @@ public class Dettaglio extends AppCompatActivity {
         }catch(RuntimeException stopException){
             stopException.printStackTrace();
         }
+        postItem.setAudio(audio = 1);
         mRecorder.release();
         mRecorder = null;
         listen.setVisibility(View.VISIBLE);
@@ -147,7 +150,6 @@ public class Dettaglio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dettaglio);
-
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -158,20 +160,22 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
-        listen.setVisibility(View.INVISIBLE);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-            if (postItem.getPosizioneAudio() != null)
-                listen.setVisibility(View.VISIBLE);
+            if(postItem != null) {
+                if ((audio = postItem.getAudio()) == 1) {
+                    listen.setVisibility(View.VISIBLE);
+                }
+            }
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
-            if (postItem.getPosizioneAudio() != null)
+            if ((audio = postItem.getAudio()) == 1)
                  listen.setVisibility(View.VISIBLE);
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
@@ -180,9 +184,10 @@ public class Dettaglio extends AppCompatActivity {
 
 
 
-        if(postItem == null){
+        mFileName = posizione + id + ".mp3";
 
-            mFileName = posizione + id + ".mp3";
+        if(postItem == null){
+            listen.setVisibility(View.INVISIBLE);
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String formattedDate = df.format(c.getTime());
@@ -191,13 +196,14 @@ public class Dettaglio extends AppCompatActivity {
             String data = ("Data: " + formattedDate);
             date.setText(data);
         } else {
+            if(postItem.getAudio() == 1){
+                listen.setVisibility(View.VISIBLE);
+            }else {
+                listen.setVisibility(View.INVISIBLE);
+            }
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
             CorrectData = postItem.getcreationDate();
-            if (postItem.getPosizioneAudio() == null)
-                mFileName = posizione + postItem.getId() + ".mp3";
-            else
-                mFileName = postItem.getPosizioneAudio();
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
             Log.d("MACOMEEEE", testoMod);
@@ -205,7 +211,7 @@ public class Dettaglio extends AppCompatActivity {
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
-            String fixedCreationDate = postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
+            String fixedCreationDate = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
             Log.d("WTF?", fixedCreationDate);
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
@@ -223,20 +229,8 @@ public class Dettaglio extends AppCompatActivity {
                     UpdateDate();
                 }
 
-//                mListener.update(new PostItem("" + titolo.getText(), "" + text1.getText(), postItem.getcreationDate() ,"" ,  postItem.getId()), id);
                 Log.d("Detail + ", "" + id);
-               /* Intent intent = new Intent(Dettaglio.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                PostItem postItem1 = new PostItem();
-                postItem1.setTesto("" + text1.getText());
-                postItem1.setTitolo("" + titolo.getText());
-                postItem1.setCreationDate("" + new Date());
-                postItem1.setId(id);
-                postItem1.setPosizioneAudio(mFileName);
-                bundle.putSerializable(POST, postItem1);
-                bundle.putInt(ID, id);
-                intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);*/
+
                 bitmap = null;
                 finish();
             }
@@ -262,11 +256,14 @@ public class Dettaglio extends AppCompatActivity {
         });
 
         listen.setOnClickListener(new View.OnClickListener() {
-            boolean mStartPlaying = true;
 
             public void onClick(View v) {
                 onPlay(mStartPlaying);
-               // mStartPlaying = !mStartPlaying;
+                if(mStartPlaying)
+                    listen.setText("STOP");
+                else
+                    listen.setText("PLAY");
+                mStartPlaying = !mStartPlaying;
             }
 
         });
@@ -297,7 +294,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData);
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, img);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -307,7 +304,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, img);
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -345,7 +342,7 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                saveFile(getApplicationContext(), bitmap, CorrectData);
+                saveFile(getApplicationContext(), bitmap, Environment.getExternalStorageDirectory() +  File.separator + "PostNoteImage" + File.separator +  CorrectData);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -359,7 +356,8 @@ public class Dettaglio extends AppCompatActivity {
             return;
         }
         try {
-            fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+           // fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+            fos = new FileOutputStream(new File(picName));
             b.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
         }
@@ -377,7 +375,8 @@ public class Dettaglio extends AppCompatActivity {
         Bitmap b = null;
         FileInputStream fis;
         try {
-            fis = context.openFileInput(picName);
+           // fis = context.openFileInput(picName);
+            fis = new FileInputStream (new File(picName));
             b = BitmapFactory.decodeStream(fis);
             fis.close();
 
@@ -400,6 +399,7 @@ public class Dettaglio extends AppCompatActivity {
         Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
+        postItem.setImmagine(img = 1);
     }
 
     @Override

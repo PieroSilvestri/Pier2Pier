@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +30,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.io.File;
@@ -293,9 +293,17 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                     Intent sendIntent = new Intent();
                     PostItem temPostItem = filteredModelList.get(position);
                     sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, temPostItem.getTitolo().toUpperCase() + "\n" + temPostItem.getTesto());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Titolo: " + temPostItem.getTitolo().toUpperCase() + "\n" + "Testo: " + temPostItem.getTesto());
                     sendIntent.setType("text/*");
+                    String percorsoImg = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
+                    if(temPostItem.getImmagine() == 1 && percorsoImg != null){
+                        Uri screenshotUri = Uri.parse(percorsoImg);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri
+                                );
+                        sendIntent.setType("image/*");
+                    }
                     startActivity(Intent.createChooser(sendIntent, "Scegli"));
+
                 }
             }
 

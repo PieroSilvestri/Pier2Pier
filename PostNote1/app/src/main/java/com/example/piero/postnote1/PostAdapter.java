@@ -18,14 +18,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     private List<PostItem> postList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView titolo, testo, id;
+        public TextView titolo, testo, id, audio;
         public ImageButton importantButton;
 
         public MyViewHolder(View view) {
             super(view);
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
-            id = (TextView) view.findViewById(R.id.ID);
+            audio = (TextView) view.findViewById(R.id.ID);
 
             importantButton = (ImageButton) view.findViewById(R.id.importantButton);
         }
@@ -46,7 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
-        holder.id.setText("" + post.getId());
+        holder.audio.setText("" + post.getAudio());
         //holder.data.setText(post.getYear());
 
         final ImageButton important = holder.importantButton;
