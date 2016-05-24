@@ -11,6 +11,17 @@ public class PostItem implements Parcelable, Serializable {
     private int id;
     int audio, immagine = 0;
     private String audioPosition;
+    private boolean flagged;
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
+
+
 
     public void setCreationDate(String date){
         creationDate = date;

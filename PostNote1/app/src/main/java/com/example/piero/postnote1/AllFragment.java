@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.io.File;
@@ -46,13 +47,14 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
     private String[] scelte = {"Share", "Delete"};
-    private final Integer[] icons = new Integer[] {R.drawable.ic_menu_share,R.drawable.ic_delete_forever};
+    private final Integer[] icons = new Integer[] {R.drawable.ic_share_black,R.drawable.ic_delete_forever_black};
     DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
     Dettaglio dettaglio;
     private Paint p = new Paint();
     private View view;
+    private static String query;
 
 
     public AllFragment() {
@@ -71,6 +73,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         super.onCreate(savedInstanceState);
         Log.d(TAGCICLO, "On Create");
         setHasOptionsMenu(true);
+        query = "";
     }
 
     public static AllFragment getIstance(){
@@ -196,7 +199,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
             }
 
             @Override
-            public void onLongClick(View view, final int position) {/*
+            public void onLongClick(View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 ListAdapter adapter = new ArrayAdapterWithIcon(getActivity(), scelte, icons);
                 builder.setTitle("Cosa Desideri fare?")
@@ -264,7 +267,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                 builder.create();
                 builder.show();
 
-            */}
+            }
         }));
         return rootView;
     }
@@ -319,16 +322,17 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                         p.setColor(Color.parseColor("#388E3C"));
                         RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
                         c.drawRect(background,p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_all_black_48dp);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_share);
                         RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
                         c.drawBitmap(icon,null,icon_dest,p);
                     } else {
                         p.setColor(Color.parseColor("#D32F2F"));
                         RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
                         c.drawRect(background,p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear_black_24dp);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_forever);
                         RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
                         c.drawBitmap(icon,null,icon_dest,p);
+
                     }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -468,8 +472,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     public boolean onQueryTextChange(String query) {
         Log.d("MAFUNZIONA", query);
         filteredModelList = filter(allList, query);
-        //allList = getArguments().getParcelableArrayList("postList");
-        //mAdapter.animateTo(filteredModelList);
         mAdapter.setPostList(filteredModelList);
 
         recyclerView.scrollToPosition(allList.size()-1);
