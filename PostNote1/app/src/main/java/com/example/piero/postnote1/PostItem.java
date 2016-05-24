@@ -10,6 +10,17 @@ public class PostItem implements Parcelable, Serializable {
     private String titolo,testo, creationDate;
     private int id;
     private String audioPosition;
+    private boolean flagged;
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
+
+
 
     public void setCreationDate(String date){
         creationDate = date;

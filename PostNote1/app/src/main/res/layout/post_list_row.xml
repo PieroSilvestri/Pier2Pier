@@ -68,17 +68,18 @@
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:id="@+id/linearLayout2">
         <!--android:layout_alignEnd="@+id/ID"-->
         <!--android:layout_toEndOf="@+id/view">-->
 
-        <ImageButton
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/importantButton"
+            android:layout_height="0dp"
+            android:id="@+id/flag"
             android:src="@drawable/ic_flag"
-            android:tint="#b5a9a9"
-            android:background="#ffffff" />
+            android:layout_weight="1"
+            android:tint="#b5a9a9" />
 
         <ImageView
             android:layout_width="wrap_content"
