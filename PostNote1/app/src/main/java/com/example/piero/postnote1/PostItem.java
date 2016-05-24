@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 public class PostItem implements Parcelable, Serializable {
     private String titolo,testo, creationDate;
-    private int id, audio, immagine;
+    private int id;
+    int audio, immagine = 0;
     private String audioPosition;
 
     public void setCreationDate(String date){
@@ -27,6 +28,9 @@ public class PostItem implements Parcelable, Serializable {
         this.titolo = "";
         this.testo = "";
     }
+
+
+
     public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine) {
         this.titolo = titolo;
         this.testo = testo;

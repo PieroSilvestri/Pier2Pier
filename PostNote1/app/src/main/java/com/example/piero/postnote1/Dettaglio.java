@@ -45,8 +45,8 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
-    private int audio = 0;
-    private int img = 0;
+    private int audio;
+    private int img;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -57,9 +57,7 @@ public class Dettaglio extends AppCompatActivity {
     private boolean mStartPlaying = true;
     private String posizione;
     private static String mFileName = null;
-
     private MediaRecorder mRecorder = null;
-
     private MediaPlayer mPlayer = null;
     public Dettaglio(){
         posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
@@ -70,6 +68,8 @@ public class Dettaglio extends AppCompatActivity {
             startRecording();
         } else {
             stopRecording();
+            listen.setVisibility(View.VISIBLE);
+            postItem.setAudio(audio = 1);
 
         }
     }
@@ -85,18 +85,10 @@ public class Dettaglio extends AppCompatActivity {
 
     private void startPlaying() {
         mPlayer = new MediaPlayer();
-        double now = System.currentTimeMillis();
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
-
-            /*if(System.currentTimeMillis() - now > mPlayer.getDuration()){
-                mPlayer.release();
-                mPlayer = null;
-                mStartPlaying = true;
-            }*/
-
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
@@ -114,13 +106,11 @@ public class Dettaglio extends AppCompatActivity {
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setOutputFile(mFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
         try {
             mRecorder.prepare();
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
-
         mRecorder.start();
     }
 
@@ -130,10 +120,8 @@ public class Dettaglio extends AppCompatActivity {
         }catch(RuntimeException stopException){
             stopException.printStackTrace();
         }
-        postItem.setAudio(audio = 1);
         mRecorder.release();
         mRecorder = null;
-        listen.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -142,8 +130,6 @@ public class Dettaglio extends AppCompatActivity {
         setResult(0, new Intent(Dettaglio.this, MainActivity.class));
         finish();
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,30 +152,26 @@ public class Dettaglio extends AppCompatActivity {
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-            if(postItem != null) {
-                if ((audio = postItem.getAudio()) == 1) {
-                    listen.setVisibility(View.VISIBLE);
-                }
-            }
+            audio = savedInstanceState.getInt("audio");
+            img = savedInstanceState.getInt("img");
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
-            if ((audio = postItem.getAudio()) == 1)
-                 listen.setVisibility(View.VISIBLE);
+            audio = postItem.getAudio();
+            Log.d("audio", String.valueOf(audio)+ postItem.getTitolo());
+
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
+            audio = 0;
         }
-
-
 
         mFileName = posizione + id + ".mp3";
 
         if(postItem == null){
             titolo.setHint("Inserisci qua il titolo");
             text1.setHint("Inserisci qua il contenuto");
-            listen.setVisibility(View.INVISIBLE);
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String formattedDate = df.format(c.getTime());
@@ -198,11 +180,6 @@ public class Dettaglio extends AppCompatActivity {
             String data = ("Data: " + formattedDate);
             date.setText(data);
         } else {
-            if(postItem.getAudio() == 1){
-                listen.setVisibility(View.VISIBLE);
-            }else {
-                listen.setVisibility(View.INVISIBLE);
-            }
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
             CorrectData = postItem.getcreationDate();
@@ -223,16 +200,12 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("cliccato", "cliccato");
-
                 if(getIntent().getExtras().getString("NUOVO") != null){
                     AddData();
-                }
-                else{
+                }else{
                     UpdateDate();
                 }
-
                 Log.d("Detail + ", "" + id);
-
                 bitmap = null;
                 finish();
             }
@@ -244,16 +217,14 @@ public class Dettaglio extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 onRecord(mStartRecording);
                 if (mStartRecording) {
                     recordAudio.setColorFilter(Color.RED);
                 } else {
                     recordAudio.setColorFilter(Color.BLACK);
+                    audio = 1;
                 }
                 mStartRecording = !mStartRecording;
-
-
             }
         });
 
@@ -313,7 +284,6 @@ public class Dettaglio extends AppCompatActivity {
         else{
             Toast.makeText(Dettaglio.this, "Data Not Updated", Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void DeleteData(){
@@ -335,9 +305,6 @@ public class Dettaglio extends AppCompatActivity {
         }
     }
 
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
@@ -354,7 +321,7 @@ public class Dettaglio extends AppCompatActivity {
 
     public static void saveFile(Context context, Bitmap b, String picName){
         FileOutputStream fos;
-        if(b ==null){
+        if(b == null){
             return;
         }
         try {
@@ -394,9 +361,6 @@ public class Dettaglio extends AppCompatActivity {
         return b;
     }
 
-
-
-
     public void onPickImage() {
         Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
@@ -431,7 +395,6 @@ public class Dettaglio extends AppCompatActivity {
             mRecorder.release();
             mRecorder = null;
         }
-
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
@@ -443,6 +406,8 @@ public class Dettaglio extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
+        outState.putInt("audio", audio);
+        outState.putInt("img", img);
     }
 
     @Override
@@ -458,18 +423,15 @@ public class Dettaglio extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.detail_share) {
             return true;
         }
-
         if (id == R.id.detail_delete) {
             DeleteData();
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
