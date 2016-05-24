@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +16,18 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
     private List<PostItem> postList;
-    private boolean colored = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView titolo, testo, id;
+        public TextView titolo, testo, id, audio;
+        public ImageButton importantButton;
 
         public MyViewHolder(View view) {
             super(view);
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
-            id = (TextView) view.findViewById(R.id.ID);
+            audio = (TextView) view.findViewById(R.id.ID);
+
+            importantButton = (ImageButton) view.findViewById(R.id.importantButton);
         }
 
     }
@@ -41,13 +42,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         return new MyViewHolder(itemView);
     }
 
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final PostItem post = postList.get(position);
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
-        holder.id.setText("" + post.getId());
+        holder.audio.setText("" + post.getAudio());
         //holder.data.setText(post.getYear());
+
+        final ImageButton important = holder.importantButton;
+        important.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                important.setColorFilter(Color.RED);
+            }
+        });
     }
+
 
     public int getItemCount() {
         return postList.size();
@@ -56,6 +66,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     public void setPostList(List<PostItem> items){
         postList = new ArrayList<>(items);
     }
+
+
+
+
 
     public void animateTo(List<PostItem> models) {
         applyAndAnimateRemovals(models);

@@ -5,7 +5,7 @@
     <item
         android:id="@+id/detail_share"
         android:title="Delete"
-        android:icon="@drawable/ic_menu_share"
+        android:icon="@drawable/ic_share"
         app:showAsAction="ifRoom"></item>
 
     <item

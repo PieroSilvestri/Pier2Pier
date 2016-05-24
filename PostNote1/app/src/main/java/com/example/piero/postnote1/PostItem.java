@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class PostItem implements Parcelable, Serializable {
     private String titolo,testo, creationDate;
-    private int id;
+    private int id, audio, immagine;
     private String audioPosition;
     private boolean flagged;
 
@@ -38,11 +38,13 @@ public class PostItem implements Parcelable, Serializable {
         this.titolo = "";
         this.testo = "";
     }
-    public PostItem(String titolo, String testo, String creationDate, int id) {
+    public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine) {
         this.titolo = titolo;
         this.testo = testo;
         this.creationDate = creationDate;
         this.id = id;
+        this.audio = audio;
+        this.immagine = immagine;
     }
 
     public PostItem(Editable text, Editable text1, int id) {
@@ -50,6 +52,22 @@ public class PostItem implements Parcelable, Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public int getAudio() {
+        return audio;
+    }
+
+    public void setAudio(int audio) {
+        this.audio = audio;
+    }
+
+    public int getImmagine() {
+        return immagine;
+    }
+
+    public void setImmagine(int immagine) {
+        this.immagine = immagine;
     }
 
     public String getcreationDate() {return creationDate;};

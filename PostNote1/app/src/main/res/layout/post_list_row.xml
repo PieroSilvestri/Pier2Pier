@@ -56,12 +56,13 @@
     <TextView
         android:id="@+id/ID"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/testo"
         android:layout_alignLeft="@+id/title"
         android:layout_alignStart="@+id/title"
         android:layout_marginTop="7dp"
-        android:textSize="0dp" />
+        android:textSize="15dp"
+        android:text="cazzo" />
 
     <LinearLayout
         android:orientation="vertical"
