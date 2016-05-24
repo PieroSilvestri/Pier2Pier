@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -51,17 +52,15 @@ public class Dettaglio extends AppCompatActivity {
     private Button listen;
     private static String CorrectData;
     private TextView detailTitolo;
-
+    private boolean mStartPlaying = true;
     private String posizione;
-    private String posizioneTemp;
     private static String mFileName = null;
 
     private MediaRecorder mRecorder = null;
 
     private MediaPlayer mPlayer = null;
     public Dettaglio(){
-        posizione =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest";
-        posizioneTemp = posizione + "Temp.mp3";
+        posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
     }
 
     private void onRecord(boolean start) {
@@ -90,10 +89,11 @@ public class Dettaglio extends AppCompatActivity {
             mPlayer.prepare();
             mPlayer.start();
 
-            if(System.currentTimeMillis() - now > mPlayer.getDuration()){
+            /*if(System.currentTimeMillis() - now > mPlayer.getDuration()){
                 mPlayer.release();
                 mPlayer = null;
-            }
+                mStartPlaying = true;
+            }*/
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
@@ -148,6 +148,7 @@ public class Dettaglio extends AppCompatActivity {
 
         setContentView(R.layout.activity_dettaglio);
 
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -195,10 +196,13 @@ public class Dettaglio extends AppCompatActivity {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
             CorrectData = postItem.getcreationDate();
-            if (postItem.getPosizioneAudio() == null)
+            if (postItem.getPosizioneAudio() == null) {
                 mFileName = posizione + postItem.getId() + ".mp3";
-            else
+                listen.setVisibility(View.INVISIBLE);
+            } else {
                 mFileName = postItem.getPosizioneAudio();
+                listen.setVisibility(View.VISIBLE);
+            }
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
             Log.d("MACOMEEEE", testoMod);
@@ -206,7 +210,7 @@ public class Dettaglio extends AppCompatActivity {
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
             myID = String.valueOf(postItem.getId());
-            String fixedCreationDate = postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
+            String fixedCreationDate = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
             Log.d("WTF?", fixedCreationDate);
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
         }
@@ -263,11 +267,10 @@ public class Dettaglio extends AppCompatActivity {
         });
 
         listen.setOnClickListener(new View.OnClickListener() {
-            boolean mStartPlaying = true;
 
             public void onClick(View v) {
                 onPlay(mStartPlaying);
-               // mStartPlaying = !mStartPlaying;
+                mStartPlaying = !mStartPlaying;
             }
 
         });
@@ -346,7 +349,7 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                saveFile(getApplicationContext(), bitmap, CorrectData);
+                saveFile(getApplicationContext(), bitmap, Environment.getExternalStorageDirectory() +  File.separator + "PostNoteImage" + File.separator +  CorrectData);
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -378,7 +381,8 @@ public class Dettaglio extends AppCompatActivity {
         Bitmap b = null;
         FileInputStream fis;
         try {
-            fis = context.openFileInput(picName);
+           // fis = context.openFileInput(picName);
+            fis = new FileInputStream (new File(picName));
             b = BitmapFactory.decodeStream(fis);
             fis.close();
 

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,15 +51,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-
-        //codice di piero per caricamento lista
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("IO ARRIVO", "QUI!!");
-        //codice di piero per caricamento lista
         viewAll();
         fragment.UpdateList();
 
@@ -66,14 +65,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         super.onStop();
-        //put element to DB, codice di piero
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        File audioFolder = new File(Environment.getExternalStorageDirectory() +
+                File.separator + "PostNoteAudio");
+        if (!audioFolder.exists()) {
+            if(audioFolder.mkdir()){
+                Toast.makeText(getApplicationContext(), "AudioFolder Created" + audioFolder.getName(), Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "AudioFolder Not Created", Toast.LENGTH_LONG).show();
+            }
+        }
+        File imageFolder = new File(Environment.getExternalStorageDirectory() +
+                File.separator + "PostNoteImage");
+        if (!imageFolder.exists()) {
+            if(imageFolder.mkdir()){
+                Toast.makeText(getApplicationContext(), "ImageFolder Created" + imageFolder.getName(), Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "ImageFolder Not Created", Toast.LENGTH_LONG).show();
+            }
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
