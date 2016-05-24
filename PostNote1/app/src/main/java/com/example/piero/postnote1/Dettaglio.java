@@ -181,8 +181,7 @@ public class Dettaglio extends AppCompatActivity {
 
 
         if(postItem == null){
-            titolo.setHint("Inserisci qua il titolo");
-            text1.setHint("Inserisci qua il contenuto");
+
             mFileName = posizione + id + ".mp3";
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
