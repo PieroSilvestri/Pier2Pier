@@ -45,6 +45,7 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
+    private int audio = 0;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -128,6 +129,7 @@ public class Dettaglio extends AppCompatActivity {
         }catch(RuntimeException stopException){
             stopException.printStackTrace();
         }
+        audio = 1;
         mRecorder.release();
         mRecorder = null;
         listen.setVisibility(View.VISIBLE);
@@ -301,7 +303,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData);
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, 1);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -311,7 +313,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, 1);
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -363,7 +365,8 @@ public class Dettaglio extends AppCompatActivity {
             return;
         }
         try {
-            fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+           // fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
+            fos = new FileOutputStream(new File(picName));
             b.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
         }
