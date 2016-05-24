@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -182,7 +183,16 @@ public class Dettaglio extends AppCompatActivity {
             id = getIntent().getExtras().getInt("ID") + 1;
         }
 
-
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg"), "image/*");
+                startActivity(intent);
+                //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg")));
+            }
+        });
 
         mFileName = posizione + id + ".mp3";
 
@@ -213,7 +223,7 @@ public class Dettaglio extends AppCompatActivity {
             myID = String.valueOf(postItem.getId());
             String fixedCreationDate = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
             Log.d("WTF?", fixedCreationDate);
-            imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate));
+            imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate + ".jpg"));
         }
 
         ImageButton save = (ImageButton) findViewById(R.id.Save);
@@ -342,7 +352,7 @@ public class Dettaglio extends AppCompatActivity {
             case CAMERA_REQUEST:
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                 imageView.setImageBitmap(bitmap);
-                saveFile(getApplicationContext(), bitmap, Environment.getExternalStorageDirectory() +  File.separator + "PostNoteImage" + File.separator +  CorrectData);
+                saveFile(getApplicationContext(), bitmap, Environment.getExternalStorageDirectory() +  File.separator + "PostNoteImage" + File.separator +  CorrectData + ".jpg");
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -358,7 +368,7 @@ public class Dettaglio extends AppCompatActivity {
         try {
            // fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
             fos = new FileOutputStream(new File(picName));
-            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
         }
         catch (FileNotFoundException e) {
@@ -399,7 +409,7 @@ public class Dettaglio extends AppCompatActivity {
         Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
-        postItem.setImmagine(img = 1);
+        //postItem.setImmagine(img = 1);
     }
 
     @Override
