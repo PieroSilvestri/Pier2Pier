@@ -74,7 +74,7 @@
         <!--android:layout_alignEnd="@+id/ID"-->
         <!--android:layout_toEndOf="@+id/view">-->
 
-        <ImageView
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:id="@+id/importantButton"
