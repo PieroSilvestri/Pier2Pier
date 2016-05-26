@@ -173,7 +173,7 @@ public class Dettaglio extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg"), "image/*");
+                intent.setDataAndType(Uri.parse("file://" + Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg"), "image/*");
                 startActivity(intent);
                 //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg")));
             }
@@ -182,10 +182,6 @@ public class Dettaglio extends AppCompatActivity {
         mFileName = posizione + id + ".mp3";
 
         if(postItem == null){
-
-            titolo.setHint("Inserisci qua il titolo");
-            text1.setHint("Inserisci qua il contenuto");
-
             listen.setVisibility(View.INVISIBLE);
 
             Calendar c = Calendar.getInstance();
@@ -305,6 +301,9 @@ public class Dettaglio extends AppCompatActivity {
     public void DeleteData(){
         Integer deleteRows = myDB.deleteData(myID);
         if(deleteRows > 0){
+            String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
+            File file = new File(selectedFilePath);
+            file.delete();
             Toast.makeText(Dettaglio.this, "Data Delete", Toast.LENGTH_LONG).show();
         }
         else{
