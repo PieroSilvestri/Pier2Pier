@@ -27,7 +27,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             testo = (TextView) view.findViewById(R.id.testo);
             audio = (TextView) view.findViewById(R.id.ID);
 
-            importantButton = (ImageButton) view.findViewById(R.id.importantButton);
+            // importantButton = (ImageButton) view.findViewById(R.id.importantButton);
         }
 
     }
@@ -49,6 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         holder.audio.setText("" + post.getAudio());
         //holder.data.setText(post.getYear());
 
+        /*
         final ImageButton important = holder.importantButton;
         important.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
                 important.setColorFilter(Color.RED);
             }
         });
+        */
     }
 
 

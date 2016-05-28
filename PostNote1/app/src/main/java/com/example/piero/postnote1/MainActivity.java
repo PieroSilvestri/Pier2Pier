@@ -174,10 +174,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PostItem post;
         postList.clear();
         Cursor res = myDB1.getAllData();
-        if(res.getCount() == 0){
-            showMessage("Error", "Lista vuota");
-            return;
-        }
+//        if(res.getCount() == 0){
+//            showMessage("Error", "Lista vuota");
+//            return;
+//        }
 
         StringBuffer buffer = new StringBuffer();
         while(res.moveToNext()){
