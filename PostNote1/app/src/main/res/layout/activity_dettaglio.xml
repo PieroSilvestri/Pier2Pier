@@ -62,14 +62,6 @@
             android:id="@+id/space2"
             android:layout_below="@+id/editText" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PLAY"
-            android:id="@+id/listen"
-            android:layout_below="@+id/space2"
-            android:layout_marginTop="10dp" />
-
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,6 +77,32 @@
             android:visibility="invisible"
             android:layout_above="@+id/ivImage"
             android:layout_centerHorizontal="true" />
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/player"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLAY"
+                android:id="@+id/listen"
+                android:layout_marginTop="10dp" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar"
+                android:layout_weight="1"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/listen"
+                android:indeterminate="false" />
+        </RelativeLayout>
 
     </RelativeLayout>
 </ScrollView>

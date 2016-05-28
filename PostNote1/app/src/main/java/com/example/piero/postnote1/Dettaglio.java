@@ -10,6 +10,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,9 +59,15 @@ public class Dettaglio extends AppCompatActivity {
     private TextView detailTitolo;
     private boolean mStartPlaying = true;
     private String posizione;
-    private static String mFileName = null;
-    private MediaRecorder mRecorder = null;
-    private MediaPlayer mPlayer = null;
+    private static String mFileName;
+    private MediaRecorder mRecorder;
+    private MediaPlayer mPlayer;
+    private SeekBar seekbar;
+    private double startTime = 0;
+    private double finalTime = 0;
+    public static int oneTimeOnly = 0;
+    private Handler myHandler = new Handler();
+
     public Dettaglio(){
         posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
     }
@@ -69,37 +77,45 @@ public class Dettaglio extends AppCompatActivity {
             startRecording();
         } else {
             stopRecording();
-            listen.setVisibility(View.VISIBLE);
             postItem.setAudio(audio = 1);
 
         }
     }
+//
+//    private void onPlay(boolean start) {
+//        if (start) {
+//            startPlaying();
+//        } else {
+//            stopPlaying();
+//        }
+//    }
 
-    private void onPlay(boolean start) {
-        if (start) {
-            stopPlaying();
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }
+//    private void startPlaying() {
+//        mPlayer.start();
+//
+//        finalTime = mPlayer.getDuration();
+//        Log.d("FINALTIME", String.valueOf(finalTime));
+//        startTime = mPlayer.getCurrentPosition();
+//
+//        if (oneTimeOnly == 0) {
+//            seekbar.setMax((int) finalTime);
+//            oneTimeOnly = 1;
+//        }
+//        seekbar.setProgress((int)startTime);
+//        myHandler.postDelayed(UpdateSongTime,100);
+////        mPlayer = new MediaPlayer();
+////        try {
+////            mPlayer.setDataSource(mFileName);
+////            mPlayer.prepare();
+////            mPlayer.start();
+////        } catch (IOException e) {
+////            Log.e(LOG_TAG, "prepare() failed");
+////        }
+//    }
 
-    private void startPlaying() {
-        mPlayer = new MediaPlayer();
-        try {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-    }
-
-    private void stopPlaying() {
-        if(mPlayer != null)
-             mPlayer.release();
-        mPlayer = null;
-    }
+//    private void stopPlaying() {
+//        mPlayer.pause();
+//    }
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
@@ -147,6 +163,7 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
+
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }
@@ -160,13 +177,34 @@ public class Dettaglio extends AppCompatActivity {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
             audio = postItem.getAudio();
-            Log.d("audio", String.valueOf(audio)+ postItem.getTitolo());
-
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
             audio = 0;
         }
+
+        seekbar = (SeekBar)findViewById(R.id.seekBar);
+        seekbar.setClickable(true);
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                // TODO Auto-generated method stub
+                if(fromUser)
+                    mPlayer.seekTo((progress));
+
+            }
+        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,11 +217,9 @@ public class Dettaglio extends AppCompatActivity {
             }
         });
 
-        mFileName = posizione + id + ".mp3";
 
         if(postItem == null){
-            listen.setVisibility(View.INVISIBLE);
-
+            postItem = new PostItem();
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String formattedDate = df.format(c.getTime());
@@ -206,7 +242,9 @@ public class Dettaglio extends AppCompatActivity {
             Log.d("WTF?", fixedCreationDate);
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate + ".jpg"));
         }
-
+        mFileName = posizione + CorrectData + ".mp3";
+        Log.d("FILENAM", mFileName);
+        mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
         ImageButton save = (ImageButton) findViewById(R.id.Save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,11 +281,36 @@ public class Dettaglio extends AppCompatActivity {
         listen.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                onPlay(mStartPlaying);
-                if(mStartPlaying)
+                //onPlay(mStartPlaying);
+                if(mStartPlaying) {
                     listen.setText("STOP");
-                else
+                    //mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
+                    if(mPlayer == null)
+                        mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
+                    mPlayer.start();
+
+                    finalTime = mPlayer.getDuration();
+                    Log.d("FINALTIME", String.valueOf(finalTime));
+                    startTime = mPlayer.getCurrentPosition();
+
+                    if (oneTimeOnly == 0) {
+                        seekbar.setMax((int) finalTime);
+                        oneTimeOnly = 1;
+                    }
+                    seekbar.setProgress((int) startTime);
+                    myHandler.postDelayed(new Runnable() {
+                        public void run() {
+                            if(mPlayer != null && mPlayer.isPlaying()) {
+                                startTime = mPlayer.getCurrentPosition();
+                                seekbar.setProgress((int) startTime);
+                                myHandler.postDelayed(this, 100);
+                            }
+                        }
+                    }, 100);
+                } else {
                     listen.setText("PLAY");
+                    mPlayer.pause();
+                }
                 mStartPlaying = !mStartPlaying;
             }
 
@@ -449,5 +512,15 @@ public class Dettaglio extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private Runnable UpdateSongTime = new Runnable() {
+        public void run() {
+            startTime = mPlayer.getCurrentPosition();
+            seekbar.setProgress((int) startTime);
+            myHandler.postDelayed(this, 100);
+
+
+
+        }
+    };
 
 }
