@@ -39,7 +39,6 @@ public class Dettaglio extends AppCompatActivity {
     private static final String ID = "ID";
     private static final String LOG_TAG = "AudioRecordTest";
     private static final int CAMERA_REQUEST=1;
-
     private Toolbar toolbar;
     private ImageView imageView;
     private static Bitmap bitmap;
@@ -81,41 +80,6 @@ public class Dettaglio extends AppCompatActivity {
 
         }
     }
-//
-//    private void onPlay(boolean start) {
-//        if (start) {
-//            startPlaying();
-//        } else {
-//            stopPlaying();
-//        }
-//    }
-
-//    private void startPlaying() {
-//        mPlayer.start();
-//
-//        finalTime = mPlayer.getDuration();
-//        Log.d("FINALTIME", String.valueOf(finalTime));
-//        startTime = mPlayer.getCurrentPosition();
-//
-//        if (oneTimeOnly == 0) {
-//            seekbar.setMax((int) finalTime);
-//            oneTimeOnly = 1;
-//        }
-//        seekbar.setProgress((int)startTime);
-//        myHandler.postDelayed(UpdateSongTime,100);
-////        mPlayer = new MediaPlayer();
-////        try {
-////            mPlayer.setDataSource(mFileName);
-////            mPlayer.prepare();
-////            mPlayer.start();
-////        } catch (IOException e) {
-////            Log.e(LOG_TAG, "prepare() failed");
-////        }
-//    }
-
-//    private void stopPlaying() {
-//        mPlayer.pause();
-//    }
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
@@ -512,15 +476,6 @@ public class Dettaglio extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private Runnable UpdateSongTime = new Runnable() {
-        public void run() {
-            startTime = mPlayer.getCurrentPosition();
-            seekbar.setProgress((int) startTime);
-            myHandler.postDelayed(this, 100);
 
-
-
-        }
-    };
 
 }
