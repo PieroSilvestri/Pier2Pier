@@ -66,6 +66,7 @@ public class Dettaglio extends AppCompatActivity {
     private double finalTime = 0;
     public static int oneTimeOnly = 0;
     private Handler myHandler = new Handler();
+    private int flag = 0;
 
     public Dettaglio(){
         posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
@@ -306,7 +307,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, img);
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, img, flag);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -316,7 +317,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, img);
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, img, flag);
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }

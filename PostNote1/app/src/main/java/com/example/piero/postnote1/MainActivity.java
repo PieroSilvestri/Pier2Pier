@@ -26,6 +26,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 ;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String ID = "ID";
     private static final String VALORE = "VALORE";
     private ArrayList<PostItem> postList = new ArrayList<PostItem>();
+    private ArrayList<PostItem> customList = new ArrayList<PostItem>();
     private DatabaseHelper myDB1;
     private String myID;
     private AllFragment fragment;
@@ -264,19 +266,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_all) {
 
-        } else if (id == R.id.nav_slideshow) {
+            final Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("postList", customList);
 
-        } else if (id == R.id.nav_manage) {
+//            FragmentManager fragmentManager = getFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragment = AllFragment.getIstance();
 
-        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_flag) {
+
+        } else if (id == R.id.nav_camera) {
+
+        } else if (id == R.id.nav_audio) {
+
+        } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

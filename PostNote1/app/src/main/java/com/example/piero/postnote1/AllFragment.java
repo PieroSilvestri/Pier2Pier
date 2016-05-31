@@ -46,8 +46,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
     private static List<PostItem> filteredModelList = new ArrayList<>();
     private static RecyclerView recyclerView;
     public static PostAdapter mAdapter;
-    private String[] scelte = {"Share", "Delete"};
-    private final Integer[] icons = new Integer[] {R.drawable.ic_share_black,R.drawable.ic_delete_forever_black};
+    private String[] scelte = {"Favourite"};
+    private final Integer[] icons = new Integer[] {R.drawable.ic_flag};
     DatabaseHelper myDB;
     public String TAGCICLO = "CICLODIVITA";
     private String myID = "";
@@ -200,72 +200,21 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
             @Override
             public void onLongClick(View view, final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                ListAdapter adapter = new ArrayAdapterWithIcon(getActivity(), scelte, icons);
-                builder.setTitle("Cosa Desideri fare?")
-                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0: {
-                                        Intent sendIntent = new Intent();
-                                        PostItem temPostItem = filteredModelList.get(position);
-                                        sendIntent.setAction(Intent.ACTION_SEND);
-                                        sendIntent.putExtra(Intent.EXTRA_TEXT, temPostItem.getTitolo().toUpperCase() + "\n"
-                                                + temPostItem.getTesto());
-                                        sendIntent.setType("text/*");
-                                        Log.d("primo", "primo");
-                                        if (temPostItem.getPosizioneAudio() != null) {
-                                            sendIntent.setType("audio/*");
-                                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(temPostItem.getPosizioneAudio())));
-                                            Log.d("secondo", "secondo");
-                                        }
-                                        if (temPostItem.getcreationDate() != null && temPostItem.getcreationDate() != "") {
-                                            Uri pictureUri = Uri.parse(temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":", "").replaceAll(" ", "").toString());
-                                            sendIntent.setType("image/*");
-                                            final File photoFile = new File(temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":", "").replaceAll(" ", "").toString());
-                                            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                                            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
-
-                                            Log.d("terzo", "terzo");
-                                        }
-
-                                        Log.d("fine", "fine");
-                                        startActivity(Intent.createChooser(sendIntent, "Scegli"));
-                                        break;
-
-                                    }
-                                    case 1: {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                        builder.setCancelable(true);
-                                        builder.setTitle("Attenzione");
-                                        builder.setMessage("Vuoi cancellare questa nota?");
-                                        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                Log.d("Position", String.valueOf(position));
-                                                myID = String.valueOf(filteredModelList.get(position).getId());
-                                                DeleteData(myID);
-                                                allList.remove(position);
-                                                filteredModelList = allList;
-                                                UpdateList();
-                                                Log.d("WEYY", "" + allList.size());
-                                                Log.d("WEYY", "" + filteredModelList.size());
-                                            }
-                                        });
-                                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        });
-                                        builder.show();
-                                        builder.create();
-                                    }
-                                }
-                            }
-                        });
-                builder.create();
-                builder.show();
+                PostItem temPostItem = filteredModelList.get(position);
+                if (temPostItem.isFlagged() == 0) {
+                    temPostItem.setFlagged(1);
+                    int id = temPostItem.getId();
+                    boolean isFlagged = myDB.updateFlag(String.valueOf(id), 1);
+                    if(isFlagged){
+                        Toast.makeText(getActivity(), "Nota aggiunta day prefe",Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getActivity(), "ERRORE UPDATE",Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    temPostItem.setFlagged(0);
+                    Toast.makeText(getActivity(), "Nota RIMOSSO ay prefe",Toast.LENGTH_LONG).show();
+                }
+                AllFragment.UpdateList();
 
             }
         }));

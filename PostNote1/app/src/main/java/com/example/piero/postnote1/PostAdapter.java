@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     private List<PostItem> postList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout postItemRL;
         public TextView titolo, testo, id, audio;
         public ImageButton importantButton;
 
@@ -26,8 +28,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
             audio = (TextView) view.findViewById(R.id.ID);
-
-            // importantButton = (ImageButton) view.findViewById(R.id.importantButton);
+            postItemRL = (RelativeLayout) view.findViewById(R.id.postItemsRL);
+            importantButton = (ImageButton) view.findViewById(R.id.importantButton);
         }
 
     }
@@ -47,6 +49,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
         holder.audio.setText("" + post.getAudio());
+        if(post.isFlagged() == 1){
+            holder.importantButton.setColorFilter(Color.RED);
+        } else {
+            holder.importantButton.setColorFilter(Color.parseColor("#b5a9a9"));
+        }
         //holder.data.setText(post.getYear());
 
         /*

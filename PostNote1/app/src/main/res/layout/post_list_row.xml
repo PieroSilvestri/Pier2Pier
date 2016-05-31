@@ -9,6 +9,7 @@
     android:paddingBottom="10dp"
     android:clickable="true"
     android:background="@drawable/rotondobordo"
+    android:id="@+id/postItemsRL"
     android:orientation="vertical">
 
     <TextView android:layout_width="40dp"
@@ -62,7 +63,7 @@
         android:layout_alignStart="@+id/title"
         android:layout_marginTop="7dp"
         android:textSize="15dp"
-        android:text="cazzo" />
+        android:text="Heyyyyyyyyyyyyy" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -75,15 +76,16 @@
         <!--android:layout_toEndOf="@+id/view">-->
 
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/importantButton"
             android:src="@drawable/ic_flag"
             android:layout_weight="1"
-            android:tint="#b5a9a9" />
+            android:tint="#b5a9a9"
+            android:backgroundTint="@color/postItem"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/iconaFoto"
             android:src="@drawable/ic_panorama"
@@ -91,7 +93,7 @@
             android:tint="#b5a9a9" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/audioIcon"
             android:layout_weight="1"
