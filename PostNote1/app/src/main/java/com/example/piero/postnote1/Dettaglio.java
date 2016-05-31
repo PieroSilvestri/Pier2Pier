@@ -1,5 +1,6 @@
 package com.example.piero.postnote1;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +50,8 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
-    private int audio;
-    private int img;
+    private int audio = 0;
+//    private int img;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -66,6 +69,8 @@ public class Dettaglio extends AppCompatActivity {
     private double finalTime = 0;
     public static int oneTimeOnly = 0;
     private Handler myHandler = new Handler();
+    private RelativeLayout player;
+    private int flag = 0;
 
     public Dettaglio(){
         posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
@@ -77,7 +82,7 @@ public class Dettaglio extends AppCompatActivity {
         } else {
             stopRecording();
             postItem.setAudio(audio = 1);
-
+            refreshPlayer();
         }
     }
 
@@ -112,6 +117,7 @@ public class Dettaglio extends AppCompatActivity {
         finish();
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,24 +133,27 @@ public class Dettaglio extends AppCompatActivity {
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
         listen = (Button) findViewById(R.id.listen);
-
+        player=(RelativeLayout)findViewById(R.id.player);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-            audio = savedInstanceState.getInt("audio");
-            img = savedInstanceState.getInt("img");
+//            audio = savedInstanceState.getInt("audio");
+//            img = savedInstanceState.getInt("img");
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
-            audio = postItem.getAudio();
+            audio = getIntent().getExtras().getInt("AUDIO");
+//            audio = postItem.getAudio();
+//            img = postItem.getImmagine();
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
-            audio = 0;
+//            audio = 0;
+//            img = 0;
         }
 
         seekbar = (SeekBar)findViewById(R.id.seekBar);
@@ -162,9 +171,9 @@ public class Dettaglio extends AppCompatActivity {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // TODO Auto-generated method stub
-                if(fromUser)
+                if (fromUser)
                     mPlayer.seekTo((progress));
 
             }
@@ -194,10 +203,13 @@ public class Dettaglio extends AppCompatActivity {
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
+//            audio = savedInstanceState.getInt("audio");
+//            img = savedInstanceState.getInt("img");
             CorrectData = postItem.getcreationDate();
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
             Log.d("MACOMEEEE", testoMod);
+            Toast.makeText(this, "UAFID" + String.valueOf(postItem.getAudio()), Toast.LENGTH_SHORT).show();
             date.setText(testoMod);
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
@@ -205,7 +217,9 @@ public class Dettaglio extends AppCompatActivity {
             String fixedCreationDate = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + postItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
             Log.d("WTF?", fixedCreationDate);
             imageView.setImageBitmap(loadBitmap(getApplicationContext(), fixedCreationDate + ".jpg"));
+
         }
+        refreshPlayer();
         mFileName = posizione + CorrectData + ".mp3";
         Log.d("FILENAM", mFileName);
         mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
@@ -236,7 +250,7 @@ public class Dettaglio extends AppCompatActivity {
                     recordAudio.setColorFilter(Color.RED);
                 } else {
                     recordAudio.setColorFilter(Color.BLACK);
-                    audio = 1;
+                    postItem.setAudio(1);
                 }
                 mStartRecording = !mStartRecording;
             }
@@ -246,38 +260,43 @@ public class Dettaglio extends AppCompatActivity {
 
             public void onClick(View v) {
                 //onPlay(mStartPlaying);
-                if(mStartPlaying) {
-                    listen.setText("STOP");
-                    //mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
-                    if(mPlayer == null)
-                        mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
-                    mPlayer.start();
+                File file = new File(mFileName);
+                if (file == null) {
+                    Toast.makeText(getApplicationContext(), "Audio Inesistente", Toast.LENGTH_LONG).show();
+                }else{
+                    if (mStartPlaying) {
+                        listen.setText("STOP");
 
-                    finalTime = mPlayer.getDuration();
-                    Log.d("FINALTIME", String.valueOf(finalTime));
-                    startTime = mPlayer.getCurrentPosition();
+                        //mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
+                        if (mPlayer == null)
+                            mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
+                        mPlayer.start();
 
-                    if (oneTimeOnly == 0) {
-                        seekbar.setMax((int) finalTime);
-                        oneTimeOnly = 1;
-                    }
-                    seekbar.setProgress((int) startTime);
-                    myHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            if(mPlayer != null && mPlayer.isPlaying()) {
-                                startTime = mPlayer.getCurrentPosition();
-                                seekbar.setProgress((int) startTime);
-                                myHandler.postDelayed(this, 100);
-                            }
+                        finalTime = mPlayer.getDuration();
+                        Log.d("FINALTIME", String.valueOf(finalTime));
+                        startTime = mPlayer.getCurrentPosition();
+
+                        if (oneTimeOnly == 0) {
+                            seekbar.setMax((int) finalTime);
+                            oneTimeOnly = 1;
                         }
-                    }, 100);
-                } else {
-                    listen.setText("PLAY");
-                    mPlayer.pause();
+                        seekbar.setProgress((int) startTime);
+                        myHandler.postDelayed(new Runnable() {
+                            public void run() {
+                                if (mPlayer != null && mPlayer.isPlaying()) {
+                                    startTime = mPlayer.getCurrentPosition();
+                                    seekbar.setProgress((int) startTime);
+                                    myHandler.postDelayed(this, 100);
+                                }
+                            }
+                        }, 100);
+                    } else {
+                        listen.setText("PLAY");
+                        mPlayer.pause();
+                    }
+                    mStartPlaying = !mStartPlaying;
                 }
-                mStartPlaying = !mStartPlaying;
             }
-
         });
 
         ImageButton annulla = (ImageButton) findViewById(R.id.detailAnnulla);
@@ -296,7 +315,6 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onPickImage();
-                Log.d("PRESSED", "Premut");
             }
         });
 
@@ -306,7 +324,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, img);
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, postItem.getAudio(), postItem.getImmagine(), flag);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -316,7 +334,8 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, img);
+        Log.d("MMMMMMMMMM", ""+postItem.getAudio());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), postItem.getAudio(), postItem.getImmagine(), flag);
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -407,7 +426,24 @@ public class Dettaglio extends AppCompatActivity {
         Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
-        //postItem.setImmagine(img = 1);
+        postItem.setImmagine(1);
+    }
+
+    private void refreshPlayer(){
+        Log.d("AUDIOPLS", ""+audio);
+        if(postItem == null){
+            if(postItem.getAudio()==0){
+                player.setVisibility(View.INVISIBLE);
+            } else {
+                player.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if(audio==0){
+                player.setVisibility(View.INVISIBLE);
+            } else {
+                player.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -448,8 +484,8 @@ public class Dettaglio extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
-        outState.putInt("audio", audio);
-        outState.putInt("img", img);
+        outState.putInt("audio", postItem.getAudio());
+        outState.putInt("img", postItem.getImmagine());
     }
 
     @Override
