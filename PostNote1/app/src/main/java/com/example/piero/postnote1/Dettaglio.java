@@ -470,6 +470,8 @@ public class Dettaglio extends AppCompatActivity {
             return true;
         }
         if (id == R.id.detail_delete) {
+            deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
+            deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + CorrectData + ".mp3");
             DeleteData();
             finish();
             return true;
@@ -477,5 +479,17 @@ public class Dettaglio extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static void deleteFiles(String path) {
+
+        File file = new File(path);
+
+        if (file.exists()) {
+            String deleteCmd = "rm -r " + path;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+            } catch (IOException e) { }
+        }
+    }
 
 }

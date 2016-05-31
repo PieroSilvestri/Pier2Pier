@@ -286,6 +286,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
                 if (direction == ItemTouchHelper.LEFT){
                     myID = String.valueOf(filteredModelList.get(position).getId());
+                    Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", ""));
+                    Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
                     DeleteData(myID);
                     allList.remove(position);
                     filteredModelList = allList;
