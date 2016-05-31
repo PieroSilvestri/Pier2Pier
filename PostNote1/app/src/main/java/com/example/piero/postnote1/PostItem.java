@@ -11,13 +11,13 @@ public class PostItem implements Parcelable, Serializable {
     private int id;
     int audio, immagine = 0;
     private String audioPosition;
-    private boolean flagged;
+    private int flagged;
 
-    public boolean isFlagged() {
+    public int isFlagged() {
         return flagged;
     }
 
-    public void setFlagged(boolean flagged) {
+    public void setFlagged(int flagged) {
         this.flagged = flagged;
     }
 
@@ -42,13 +42,14 @@ public class PostItem implements Parcelable, Serializable {
 
 
 
-    public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine) {
+    public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine, int flagged) {
         this.titolo = titolo;
         this.testo = testo;
         this.creationDate = creationDate;
         this.id = id;
         this.audio = audio;
         this.immagine = immagine;
+        this.flagged = flagged;
     }
 
     public PostItem(Editable text, Editable text1, int id) {
@@ -93,31 +94,33 @@ public class PostItem implements Parcelable, Serializable {
     }
 
     public void setTitolo(String titolo) {
-        this.titolo = titolo;
-    }
-
-    public PostItem(Parcel in) {
-        super();
-        readFromParcel(in);
-    }
-
-    public static final Parcelable.Creator<PostItem> CREATOR = new Parcelable.Creator<PostItem>() {
-        public PostItem createFromParcel(Parcel in) {
-            return new PostItem(in);
+            this.titolo = titolo;
         }
 
-        public PostItem[] newArray(int size) {
-
-            return new PostItem[size];
+        public PostItem(Parcel in) {
+            super();
+            readFromParcel(in);
         }
 
-    };
+        public static final Parcelable.Creator<PostItem> CREATOR = new Parcelable.Creator<PostItem>() {
+            public PostItem createFromParcel(Parcel in) {
+                return new PostItem(in);
+            }
+
+            public PostItem[] newArray(int size) {
+
+                return new PostItem[size];
+            }
+
+        };
 
     public void readFromParcel(Parcel in) {
         testo = in.readString();
         titolo = in.readString();
         creationDate = in.readString();
         id = in.readInt();
+        audio = in.readInt();
+        immagine = in.readInt();
     }
     public int describeContents() {
         return 0;
@@ -128,6 +131,8 @@ public class PostItem implements Parcelable, Serializable {
         dest.writeString(titolo);
         dest.writeString(creationDate);
         dest.writeInt(id);
+        dest.writeInt(audio);
+        dest.writeInt(immagine);
     }
 
 }
