@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -208,7 +207,7 @@ public class Dettaglio extends AppCompatActivity {
             CorrectData = postItem.getcreationDate();
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
-            Log.d("MACOMEEEE", testoMod);
+            Log.d("MACOMEEEE", testoMod.toString());
             Toast.makeText(this, "UAFID" + String.valueOf(postItem.getAudio()), Toast.LENGTH_SHORT).show();
             date.setText(testoMod);
             String nome = postItem.getcreationDate();
@@ -506,8 +505,8 @@ public class Dettaglio extends AppCompatActivity {
             return true;
         }
         if (id == R.id.detail_delete) {
-            deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
-            deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + CorrectData + ".mp3");
+           // deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
+           // deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + CorrectData + ".mp3");
             DeleteData();
             finish();
             return true;

@@ -30,7 +30,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.io.File;
@@ -241,8 +240,8 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
                 if (direction == ItemTouchHelper.LEFT){
                     myID = String.valueOf(filteredModelList.get(position).getId());
-                    Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", ""));
-                    Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
+                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", ""));
+                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
                     DeleteData(myID);
                     allList.remove(position);
                     filteredModelList = allList;
