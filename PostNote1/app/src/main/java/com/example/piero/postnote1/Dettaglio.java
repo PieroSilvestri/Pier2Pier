@@ -47,8 +47,8 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
-    private int audio;
-    private int img;
+    private int audio = -1;
+//    private int img;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -77,7 +77,7 @@ public class Dettaglio extends AppCompatActivity {
             startRecording();
         } else {
             stopRecording();
-            postItem.setAudio(audio = 1);
+            postItem.setAudio(1);
 
         }
     }
@@ -135,17 +135,20 @@ public class Dettaglio extends AppCompatActivity {
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-            audio = savedInstanceState.getInt("audio");
-            img = savedInstanceState.getInt("img");
+//            audio = savedInstanceState.getInt("audio");
+//            img = savedInstanceState.getInt("img");
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
-            audio = postItem.getAudio();
+            audio = getIntent().getExtras().getInt("AUDIO");
+//            audio = postItem.getAudio();
+//            img = postItem.getImmagine();
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
-            audio = 0;
+//            audio = 0;
+//            img = 0;
         }
 
         seekbar = (SeekBar)findViewById(R.id.seekBar);
@@ -195,10 +198,13 @@ public class Dettaglio extends AppCompatActivity {
         } else {
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
+//            audio = savedInstanceState.getInt("audio");
+//            img = savedInstanceState.getInt("img");
             CorrectData = postItem.getcreationDate();
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
             Log.d("MACOMEEEE", testoMod);
+            Toast.makeText(this, "UAFID" + String.valueOf(postItem.getAudio()), Toast.LENGTH_SHORT).show();
             date.setText(testoMod);
             String nome = postItem.getcreationDate();
             Log.d("FILECREATO", nome);
@@ -237,7 +243,7 @@ public class Dettaglio extends AppCompatActivity {
                     recordAudio.setColorFilter(Color.RED);
                 } else {
                     recordAudio.setColorFilter(Color.BLACK);
-                    audio = 1;
+                    postItem.setAudio(1);
                 }
                 mStartRecording = !mStartRecording;
             }
@@ -297,7 +303,6 @@ public class Dettaglio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onPickImage();
-                Log.d("PRESSED", "Premut");
             }
         });
 
@@ -307,7 +312,7 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void AddData(){
-        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, audio, img, flag);
+        boolean isInserted = myDB.insertData(titolo.getText().toString(), text1.getText().toString(), CorrectData, postItem.getAudio(), postItem.getImmagine(), flag);
         if(isInserted){
             Toast.makeText(Dettaglio.this, "Data Inserted", Toast.LENGTH_LONG).show();
         }
@@ -317,7 +322,8 @@ public class Dettaglio extends AppCompatActivity {
     }
 
     public void UpdateDate(){
-        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), audio, img, flag);
+        Log.d("MMMMMMMMMM", ""+postItem.getAudio());
+        boolean isUpdate = myDB.updateData(myID, titolo.getText().toString(), text1.getText().toString(), postItem.getAudio(), postItem.getImmagine(), flag);
         if(isUpdate){
             Toast.makeText(Dettaglio.this, "Data Updated", Toast.LENGTH_LONG).show();
         }
@@ -408,7 +414,7 @@ public class Dettaglio extends AppCompatActivity {
         Toast.makeText(Dettaglio.this, "ID: " + id, Toast.LENGTH_LONG).show();
         Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
         startActivityForResult(chooseImageIntent, CAMERA_REQUEST);
-        //postItem.setImmagine(img = 1);
+        postItem.setImmagine(1);
     }
 
     @Override
@@ -449,8 +455,8 @@ public class Dettaglio extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(POST, postItem);
         outState.putInt(ID, id);
-        outState.putInt("audio", audio);
-        outState.putInt("img", img);
+        outState.putInt("audio", postItem.getAudio());
+        outState.putInt("img", postItem.getImmagine());
     }
 
     @Override

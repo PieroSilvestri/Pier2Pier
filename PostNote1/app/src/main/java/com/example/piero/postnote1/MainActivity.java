@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         StringBuffer buffer = new StringBuffer();
         while(res.moveToNext()){
-            post = new PostItem(res.getString(1), res.getString(2), res.getString(3), res.getInt(0), res.getInt(4), res.getInt(5));
+            post = new PostItem(res.getString(1), res.getString(2), res.getString(3), res.getInt(0), res.getInt(4), res.getInt(5), res.getInt(6));
 
             postList.add(post);
             /*

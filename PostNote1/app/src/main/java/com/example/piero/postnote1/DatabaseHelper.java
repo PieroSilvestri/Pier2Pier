@@ -12,7 +12,7 @@ import android.widget.Toast;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABSE_NAME = "Post.db";
+    public static final String DATABSE_NAME = "PostPiero.db";
     public static final String TABLE_NAME = "post_table";
     public static final String COL_ID = "ID";
     public static final String COL_TITOLO = "TITOLO";

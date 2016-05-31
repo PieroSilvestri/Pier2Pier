@@ -42,13 +42,14 @@ public class PostItem implements Parcelable, Serializable {
 
 
 
-    public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine) {
+    public PostItem(String titolo, String testo, String creationDate, int id, int audio, int immagine, int flagged) {
         this.titolo = titolo;
         this.testo = testo;
         this.creationDate = creationDate;
         this.id = id;
         this.audio = audio;
         this.immagine = immagine;
+        this.flagged = flagged;
     }
 
     public PostItem(Editable text, Editable text1, int id) {
@@ -118,6 +119,8 @@ public class PostItem implements Parcelable, Serializable {
         titolo = in.readString();
         creationDate = in.readString();
         id = in.readInt();
+        audio = in.readInt();
+        immagine = in.readInt();
     }
     public int describeContents() {
         return 0;
@@ -128,6 +131,8 @@ public class PostItem implements Parcelable, Serializable {
         dest.writeString(titolo);
         dest.writeString(creationDate);
         dest.writeInt(id);
+        dest.writeInt(audio);
+        dest.writeInt(immagine);
     }
 
 }

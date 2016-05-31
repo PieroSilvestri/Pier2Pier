@@ -194,6 +194,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MyPost", item);
                 bundle.putInt("ID", allList.get(position).getId());
+                bundle.putInt("AUDIO", allList.get(position).getAudio());
                 //startActivity(i.putExtras(bundle));
                 startActivityForResult(i.putExtras(bundle), 10);
             }
@@ -203,17 +204,22 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                 PostItem temPostItem = filteredModelList.get(position);
                 if (temPostItem.isFlagged() == 0) {
                     temPostItem.setFlagged(1);
-                    int id = temPostItem.getId();
-                    boolean isFlagged = myDB.updateFlag(String.valueOf(id), 1);
+                    String id = String.valueOf(temPostItem.getId());
+                    boolean isFlagged = myDB.updateFlag(id, 1);
                     if(isFlagged){
-                        Toast.makeText(getActivity(), "Nota aggiunta day prefe",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Nota aggiunta ai preferiti",Toast.LENGTH_LONG).show();
                     }else{
                         Toast.makeText(getActivity(), "ERRORE UPDATE",Toast.LENGTH_LONG).show();
                     }
                 } else {
                     temPostItem.setFlagged(0);
-                    Toast.makeText(getActivity(), "Nota RIMOSSO ay prefe",Toast.LENGTH_LONG).show();
-                }
+                    String id = String.valueOf(temPostItem.getId());
+                    boolean isFlagged = myDB.updateFlag(id, 0);
+                    if(isFlagged){
+                        Toast.makeText(getActivity(), "Nota rimossa dai preferiti",Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getActivity(), "ERRORE UPDATE",Toast.LENGTH_LONG).show();
+                    }                }
                 AllFragment.UpdateList();
 
             }
