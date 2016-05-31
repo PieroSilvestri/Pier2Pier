@@ -50,7 +50,7 @@ public class Dettaglio extends AppCompatActivity {
     private EditText text1;
     private EditText titolo;
     private int id = -1;
-    private int audio = -1;
+    private int audio = 0;
 //    private int img;
     private String myID;
     private PostItem postItem;
@@ -70,6 +70,7 @@ public class Dettaglio extends AppCompatActivity {
     public static int oneTimeOnly = 0;
     private Handler myHandler = new Handler();
     private RelativeLayout player;
+    private int flag = 0;
 
     public Dettaglio(){
         posizione =  Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + "/audioRecord";
