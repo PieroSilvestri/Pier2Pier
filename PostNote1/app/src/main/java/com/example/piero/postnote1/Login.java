@@ -1,14 +1,12 @@
 package com.example.piero.postnote1;
 
 import android.content.Intent;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -23,7 +21,7 @@ import cz.msebera.android.httpclient.Header;
 public class Login extends AppCompatActivity {
 
     EditText usernameText, passwordText;
-    Button btnLogin;
+    Button btnLogin, btnRegister;
     JSONObject jsonObject;
 
     @Override
@@ -31,7 +29,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        usernameText = (EditText) findViewById(R.id.textUsername);
+        usernameText = (EditText) findViewById(R.id.usernameText);
         passwordText = (EditText) findViewById(R.id.textPassword);
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -39,6 +37,14 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 OnLogin();
+            }
+        });
+
+        btnRegister = (Button)findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenReg();
             }
         });
 
@@ -72,7 +78,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 if(res.equals("true")){
-                    OpenReg();
+                    OpenMain();
                 }else{
                     Toast.makeText(Login.this, "Autenticazione fallita", Toast.LENGTH_SHORT).show();
                 }
@@ -90,7 +96,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void OpenReg() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, Register.class));
     }
 
     public void OpenMain() {
