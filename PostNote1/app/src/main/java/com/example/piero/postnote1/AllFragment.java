@@ -242,24 +242,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                     //myID = String.valueOf(filteredModelList.get(position).getId());
                     //DeleteData(myID);
 
-                    PostItem removePost = allList.get(position);
-                    allList.remove(allList.indexOf(removePost));
-
-                    String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".jpg");
-                    File file = new File(selectedFilePath);
-                    if(file.exists())
-                        file.delete();
-                    String selectedFilePathAudio = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator +  "audioRecord" + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
-                    File fileAudio = new File(selectedFilePathAudio);
-                    if(fileAudio.exists())
-                        fileAudio.delete();
-
-                    DeleteData(String.valueOf(removePost.getId()));
-
-                    Log.d("ANOTHER ONE", "" + removePost.getTitolo());
-                    filteredModelList = allList;
-                    UpdateList();
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setCancelable(true);
                     builder.setTitle("ATTENZIONE ATTENZIONE");
@@ -267,9 +249,27 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                     builder.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
+//                            PostItem removePost = allList.get(position);
+//                            allList.remove(allList.indexOf(removePost));
+//                            DeleteData(String.valueOf(removePost.getId()));
+//                            Log.d("ANOTHER ONE", "" + removePost.getTitolo());
+//                            filteredModelList = allList;
+//                            UpdateList();
+
                             PostItem removePost = allList.get(position);
                             allList.remove(allList.indexOf(removePost));
+
+                            String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".jpg");
+                            File file = new File(selectedFilePath);
+                            if(file.exists())
+                                file.delete();
+                            String selectedFilePathAudio = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator +  "audioRecord" + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
+                            File fileAudio = new File(selectedFilePathAudio);
+                            if(fileAudio.exists())
+                                fileAudio.delete();
+
                             DeleteData(String.valueOf(removePost.getId()));
+
                             Log.d("ANOTHER ONE", "" + removePost.getTitolo());
                             filteredModelList = allList;
                             UpdateList();
