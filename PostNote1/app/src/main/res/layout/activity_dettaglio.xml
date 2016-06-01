@@ -121,7 +121,8 @@
             android:layout_weight="1"
             android:src="@drawable/ic_add_a_photo"
             android:background="#ffffff"
-            android:layout_marginTop="1dp" />
+            android:layout_marginTop="1dp"
+            android:tint="#909090" />
 
         <View
             android:layout_width="1dip"
@@ -138,7 +139,8 @@
             android:layout_weight="1"
             android:background="#ffffff"
             android:src="@drawable/ic_keyboard_voice"
-            android:layout_marginTop="1dp" />
+            android:layout_marginTop="1dp"
+            android:tint="#909090" />
 
         <View
             android:layout_width="1dip"
@@ -155,7 +157,8 @@
             android:background="#ffffff"
             android:layout_weight="1"
             android:src="@drawable/ic_done_all"
-            android:layout_marginTop="1dp" />
+            android:layout_marginTop="1dp"
+            android:tint="#909090" />
 
     </LinearLayout>
 

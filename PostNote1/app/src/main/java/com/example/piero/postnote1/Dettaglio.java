@@ -37,6 +37,7 @@ import java.util.Calendar;
 
 
 public class Dettaglio extends AppCompatActivity {
+    boolean mStartRecording = true;
     private static final String POST = "POST";
     private static final String ID = "ID";
     private static final String LOG_TAG = "AudioRecordTest";
@@ -196,10 +197,13 @@ public class Dettaglio extends AppCompatActivity {
             SimpleDateFormat df  = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String formattedDate = df.format(c.getTime());
             CorrectData = formattedDate.replaceAll("/", "").replaceAll(":","").replaceAll(" ","");
+            postItem.setCreationDate(CorrectData);
             Log.d("WTF?", CorrectData);
             String data = ("Data: " + formattedDate);
             date.setText(data);
+            postItem.setCreationDate(CorrectData);
         } else {
+
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
 //            audio = savedInstanceState.getInt("audio");
@@ -226,6 +230,12 @@ public class Dettaglio extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!mStartRecording){
+                    stopRecording();
+                    postItem.setAudio(audio = 1);
+                    refreshPlayer();
+                }
+
                 Log.d("cliccato", "cliccato");
                 if(getIntent().getExtras().getString("NUOVO") != null){
                     AddData();
@@ -240,7 +250,7 @@ public class Dettaglio extends AppCompatActivity {
 
         final ImageButton recordAudio = (ImageButton) findViewById(R.id.audio);
         recordAudio.setOnClickListener(new View.OnClickListener() {
-            boolean mStartRecording = true;
+
 
             @Override
             public void onClick(View v) {
@@ -346,14 +356,20 @@ public class Dettaglio extends AppCompatActivity {
     public void DeleteData(){
         Integer deleteRows = myDB.deleteData(myID);
         if(deleteRows > 0){
-            String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
-            File file = new File(selectedFilePath);
-            file.delete();
             Toast.makeText(Dettaglio.this, "Data Delete", Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+        String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
+        File file = new File(selectedFilePath);
+        if(file.exists())
+            file.delete();
+        String selectedFilePathAudio = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator +  "audioRecord" + CorrectData + ".mp3");
+        File fileAudio = new File(selectedFilePathAudio);
+        if(fileAudio.exists())
+            fileAudio.delete();
+
         AllFragment.UpdateList();
     }
     public void DeleteDataFragment(String id){
@@ -506,26 +522,11 @@ public class Dettaglio extends AppCompatActivity {
             return true;
         }
         if (id == R.id.detail_delete) {
-           // deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg");
-           // deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + CorrectData + ".mp3");
             DeleteData();
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void deleteFiles(String path) {
-
-        File file = new File(path);
-
-        if (file.exists()) {
-            String deleteCmd = "rm -r " + path;
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                runtime.exec(deleteCmd);
-            } catch (IOException e) { }
-        }
     }
 
 }

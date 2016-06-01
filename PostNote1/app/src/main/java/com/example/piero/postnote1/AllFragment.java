@@ -1,7 +1,6 @@
 package com.example.piero.postnote1;
 
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -179,7 +179,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        //recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
+        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
         recyclerView.setAdapter(mAdapter);
 
         initSwipe();
@@ -236,27 +236,63 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
+                final int position = viewHolder.getAdapterPosition();
 
                 if (direction == ItemTouchHelper.LEFT){
                     //myID = String.valueOf(filteredModelList.get(position).getId());
-                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", ""));
-                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
                     //DeleteData(myID);
+
                     PostItem removePost = allList.get(position);
                     allList.remove(allList.indexOf(removePost));
+
+                    String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".jpg");
+                    File file = new File(selectedFilePath);
+                    if(file.exists())
+                        file.delete();
+                    String selectedFilePathAudio = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator +  "audioRecord" + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
+                    File fileAudio = new File(selectedFilePathAudio);
+                    if(fileAudio.exists())
+                        fileAudio.delete();
+
                     DeleteData(String.valueOf(removePost.getId()));
+
                     Log.d("ANOTHER ONE", "" + removePost.getTitolo());
                     filteredModelList = allList;
                     UpdateList();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setCancelable(true);
+                    builder.setTitle("ATTENZIONE ATTENZIONE");
+                    builder.setMessage("Sicuro di voler cancellare la nota?");
+                    builder.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            PostItem removePost = allList.get(position);
+                            allList.remove(allList.indexOf(removePost));
+                            DeleteData(String.valueOf(removePost.getId()));
+                            Log.d("ANOTHER ONE", "" + removePost.getTitolo());
+                            filteredModelList = allList;
+                            UpdateList();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            UpdateList();
+                        }
+
+                    });
+                    builder.show();
+
+
                 } else {
                     Intent sendIntent = new Intent();
                     PostItem temPostItem = filteredModelList.get(position);
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Titolo: " + temPostItem.getTitolo().toUpperCase() + "\n" + "Testo: " + temPostItem.getTesto());
                     sendIntent.setType("text/*");
-                    String percorsoImg = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "");
-                    if(temPostItem.getImmagine() == 1 && percorsoImg != null){
+                    String percorsoImg = Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + temPostItem.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".jpg";
+                    File img = new File(percorsoImg);
+                    if(temPostItem.getImmagine() == 1 && img.exists()){
                         Uri screenshotUri = Uri.parse(percorsoImg);
                         sendIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri
                                 );
@@ -411,6 +447,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         else{
             Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+
     }
 
 
