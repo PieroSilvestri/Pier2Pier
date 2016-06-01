@@ -240,12 +240,21 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
                 if (direction == ItemTouchHelper.LEFT){
                     //myID = String.valueOf(filteredModelList.get(position).getId());
-                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", ""));
-                    //Dettaglio.deleteFiles(Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator + filteredModelList.get(position).getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
                     //DeleteData(myID);
                     PostItem removePost = allList.get(position);
                     allList.remove(allList.indexOf(removePost));
+
+                    String selectedFilePath = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".jpg");
+                    File file = new File(selectedFilePath);
+                    if(file.exists())
+                        file.delete();
+                    String selectedFilePathAudio = (Environment.getExternalStorageDirectory() + File.separator + "PostNoteAudio" + File.separator +  "audioRecord" + removePost.getcreationDate().replaceAll("/", "").replaceAll(":","").replaceAll(" ", "") + ".mp3");
+                    File fileAudio = new File(selectedFilePathAudio);
+                    if(fileAudio.exists())
+                        fileAudio.delete();
+
                     DeleteData(String.valueOf(removePost.getId()));
+
                     Log.d("ANOTHER ONE", "" + removePost.getTitolo());
                     filteredModelList = allList;
                     UpdateList();
@@ -411,6 +420,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         else{
             Toast.makeText(getActivity(), "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+
     }
 
 
