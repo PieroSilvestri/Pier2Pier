@@ -179,7 +179,7 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        //recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
+        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
         recyclerView.setAdapter(mAdapter);
 
         initSwipe();
