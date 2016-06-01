@@ -87,12 +87,15 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="PLAY"
                 android:id="@+id/listen"
-                android:layout_marginTop="10dp" />
+                android:src="@drawable/ic_play_circle_outline"
+                android:layout_alignTop="@+id/seekBar"
+                android:backgroundTint="#ffffff"
+                android:tint="#909090" />
 
             <SeekBar
                 android:layout_width="match_parent"
