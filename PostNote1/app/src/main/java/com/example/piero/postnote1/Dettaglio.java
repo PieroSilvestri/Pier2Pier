@@ -56,7 +56,7 @@ public class Dettaglio extends AppCompatActivity {
     private PostItem postItem;
     private TextView date;
     private DatabaseHelper myDB;
-    private Button listen;
+    private ImageButton listen;
     private static String CorrectData;
     private TextView detailTitolo;
     private boolean mStartPlaying = true;
@@ -132,7 +132,7 @@ public class Dettaglio extends AppCompatActivity {
         titolo = (EditText)findViewById(R.id.postTitle);
         text1 = (EditText)findViewById(R.id.editText);
         date = (TextView)findViewById(R.id.date);
-        listen = (Button) findViewById(R.id.listen);
+        listen = (ImageButton) findViewById(R.id.listen);
         player=(RelativeLayout)findViewById(R.id.player);
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
@@ -274,8 +274,6 @@ public class Dettaglio extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Audio Inesistente", Toast.LENGTH_LONG).show();
                 }else{
                     if (mStartPlaying) {
-                        listen.setText("STOP");
-
                         //mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
                         if (mPlayer == null)
                             mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
@@ -300,7 +298,6 @@ public class Dettaglio extends AppCompatActivity {
                             }
                         }, 100);
                     } else {
-                        listen.setText("PLAY");
                         mPlayer.pause();
                     }
                     mStartPlaying = !mStartPlaying;
