@@ -354,6 +354,7 @@ public class Dettaglio extends AppCompatActivity {
         else{
             Toast.makeText(Dettaglio.this, "Data Not Delete", Toast.LENGTH_LONG).show();
         }
+        AllFragment.UpdateList();
     }
     public void DeleteDataFragment(String id){
         Integer deleteRows = myDB.deleteData(id);

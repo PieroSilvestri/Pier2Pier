@@ -54,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
-        holder.id.setText("AUDIO: ->>" + post.getAudio());
+//        holder.id.setText("AUDIO: ->>" + post.getAudio());
         if(post.isFlagged() == 1){
             holder.importantButton.setColorFilter(Color.RED);
         } else {

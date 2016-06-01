@@ -63,7 +63,7 @@
         android:layout_alignStart="@+id/title"
         android:layout_marginTop="7dp"
         android:textSize="15dp"
-        android:text="Heyyyyyyyyyyyyy" />
+        android:text="" />
 
     <LinearLayout
         android:orientation="vertical"

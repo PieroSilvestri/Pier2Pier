@@ -269,18 +269,82 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_all) {
 
             final Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("postList", customList);
+            bundle.putParcelableArrayList("postList", postList);
 
-//            FragmentManager fragmentManager = getFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragment = AllFragment.getIstance();
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragment = AllFragment.getIstance();
 
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
+            fragmentTransaction.commit();
+
+            viewAll();
 
         } else if (id == R.id.nav_flag) {
 
+            customList.clear();
+
+            for (int i=0;i<postList.size();i++){
+                if(postList.get(i).isFlagged()==1){
+                    customList.add(postList.get(i));
+                }
+            }
+
+            final Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("postList", customList);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragment = AllFragment.getIstance();
+
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
+            fragmentTransaction.commit();
+
+
+
         } else if (id == R.id.nav_camera) {
 
+            customList.clear();
+
+            for (int i=0;i<postList.size();i++){
+                if(postList.get(i).getImmagine()==1){
+                    customList.add(postList.get(i));
+                }
+            }
+
+            final Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("postList", customList);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragment = AllFragment.getIstance();
+
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
+            fragmentTransaction.commit();
+
         } else if (id == R.id.nav_audio) {
+
+            customList.clear();
+
+            for (int i=0;i<postList.size();i++){
+                if(postList.get(i).getAudio()==1){
+                    customList.add(postList.get(i));
+                }
+            }
+
+            final Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("postList", customList);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragment = AllFragment.getIstance();
+
+            fragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
+            fragmentTransaction.commit();
 
         } /*else if (id == R.id.nav_share) {
 
