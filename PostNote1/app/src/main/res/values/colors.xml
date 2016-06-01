@@ -13,5 +13,5 @@
     <color name="titolo">#222222</color>
     <color name="buttonsColor">#b71c1c</color>
     <color name="navigationBarColor">#4e342e</color>
-    <color name="postItem">#80deea</color>
+    <color name="postItem">#fff</color>
 </resources>

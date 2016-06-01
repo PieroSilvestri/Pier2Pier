@@ -5,7 +5,7 @@
     android:focusable="true"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
+    android:paddingTop="0dp"
     android:paddingBottom="10dp"
     android:clickable="true"
     android:background="@drawable/rotondobordo"
@@ -82,7 +82,7 @@
             android:src="@drawable/ic_star_border"
             android:layout_weight="1"
             android:tint="#b5a9a9"
-            android:backgroundTint="@color/postItem"/>
+            android:backgroundTint="#ffffff" />
 
         <ImageView
             android:layout_width="match_parent"
