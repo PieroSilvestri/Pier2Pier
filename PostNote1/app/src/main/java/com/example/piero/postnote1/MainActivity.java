@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String myID;
     private AllFragment fragment;
     private int count;
+    int backButtonCount =0;
 
     @Override
     protected void onPause() {
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragment.UpdateList();
 
     }
+
+
 
     @Override
     protected void onStop() {
@@ -231,7 +234,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(backButtonCount >= 1)
+            {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                System.exit(0);
+            }
+            else
+            {
+                Toast.makeText(this, "Premi ancora il tasto back per uscire dalla migliore app 2015/16.", Toast.LENGTH_SHORT).show();
+                backButtonCount++;
+            }
         }
     }
 
@@ -345,9 +360,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.replace(R.id.container, fragment, "ALLFRAG");
             fragmentTransaction.commit();
 
-        } /*else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            Intent intent = new Intent(this,Login.class);
+            Toast.makeText(getApplicationContext(), "Hai effettuato correttamente il logout", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
+        } /*else if (id == R.id.nav_send) {
 
         }*/
 
