@@ -26,9 +26,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
-;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String ID = "ID";
@@ -178,22 +175,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PostItem post;
         postList.clear();
         Cursor res = myDB1.getAllData();
-//        if(res.getCount() == 0){
-//            showMessage("Error", "Lista vuota");
-//            return;
-//        }
 
         StringBuffer buffer = new StringBuffer();
         while(res.moveToNext()){
             post = new PostItem(res.getString(1), res.getString(2), res.getString(3), res.getInt(0), res.getInt(4), res.getInt(5), res.getInt(6));
 
             postList.add(post);
-            /*
-            for(int i = 0; i<30;i++){
-                PostItem post = new PostItem("Test " + i, "Contenuto " + i, "", i);
-                postList.add(post);
-            }
-             */
         }
     }
 
@@ -254,16 +241,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
@@ -272,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_all) {
@@ -359,9 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this,Login.class);
             Toast.makeText(getApplicationContext(), "Hai effettuato correttamente il logout", Toast.LENGTH_SHORT).show();
             startActivity(intent);
-        } /*else if (id == R.id.nav_send) {
-
-        }*/
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

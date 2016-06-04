@@ -51,7 +51,6 @@ public class Dettaglio extends AppCompatActivity {
     private EditText titolo;
     private int id = -1;
     private int audio = 0;
-//    private int img;
     private String myID;
     private PostItem postItem;
     private TextView date;
@@ -140,20 +139,14 @@ public class Dettaglio extends AppCompatActivity {
         if(savedInstanceState != null) {
             postItem = (PostItem) savedInstanceState.getSerializable(POST);
             id = savedInstanceState.getInt(ID);
-//            audio = savedInstanceState.getInt("audio");
-//            img = savedInstanceState.getInt("img");
         }
         if(getIntent().getSerializableExtra("MyPost") != null) {
             postItem = (PostItem)getIntent().getSerializableExtra("MyPost");
             id = getIntent().getExtras().getInt("ID");
             audio = getIntent().getExtras().getInt("AUDIO");
-//            audio = postItem.getAudio();
-//            img = postItem.getImmagine();
         }
         if(getIntent().getExtras().getString("NUOVO") != null){
             id = getIntent().getExtras().getInt("ID") + 1;
-//            audio = 0;
-//            img = 0;
         }
 
         seekbar = (SeekBar)findViewById(R.id.seekBar);
@@ -186,7 +179,6 @@ public class Dettaglio extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse("file://" + Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg"), "image/*");
                 startActivity(intent);
-                //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Environment.getExternalStorageDirectory() + File.separator + "PostNoteImage" + File.separator + CorrectData + ".jpg")));
             }
         });
 
@@ -206,8 +198,6 @@ public class Dettaglio extends AppCompatActivity {
 
             titolo.setText("" + postItem.getTitolo());
             text1.setText("" + postItem.getTesto());
-//            audio = savedInstanceState.getInt("audio");
-//            img = savedInstanceState.getInt("img");
             CorrectData = postItem.getcreationDate();
             String testoTW = postItem.getcreationDate();
             String testoMod = "Data: " + testoTW.substring(0,2) + "/" + testoTW.substring(2,4)+ "/" + testoTW.substring(4,6) + " " + testoTW.substring(6,8) + ":" + testoTW.substring(8,10);
@@ -268,13 +258,11 @@ public class Dettaglio extends AppCompatActivity {
         listen.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                //onPlay(mStartPlaying);
                 File file = new File(mFileName);
                 if (file == null) {
                     Toast.makeText(getApplicationContext(), "Audio Inesistente", Toast.LENGTH_LONG).show();
                 }else{
                     if (mStartPlaying) {
-                        //mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
                         if (mPlayer == null)
                             mPlayer = new MediaPlayer().create(getApplicationContext(), Uri.parse(mFileName));
                         mPlayer.start();
@@ -399,7 +387,6 @@ public class Dettaglio extends AppCompatActivity {
             return;
         }
         try {
-           // fos = context.openFileOutput(picName, Context.MODE_PRIVATE);
             fos = new FileOutputStream(new File(picName));
             b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
@@ -418,7 +405,6 @@ public class Dettaglio extends AppCompatActivity {
         Bitmap b = null;
         FileInputStream fis;
         try {
-           // fis = context.openFileInput(picName);
             fis = new FileInputStream (new File(picName));
             b = BitmapFactory.decodeStream(fis);
             fis.close();
@@ -503,18 +489,13 @@ public class Dettaglio extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.detail_share) {
             return true;
         }

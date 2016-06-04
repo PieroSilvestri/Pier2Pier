@@ -54,7 +54,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         PostItem post = postList.get(position);
         holder.titolo.setText(post.getTitolo());
         holder.testo.setText("" + post.getTesto());
-//        holder.id.setText("AUDIO: ->>" + post.getAudio());
         if(post.isFlagged() == 1){
             holder.importantButton.setImageResource(R.drawable.ic_star);
             holder.importantButton.setColorFilter(Color.RED);
@@ -74,17 +73,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         } else {
             holder.audio.setVisibility(View.INVISIBLE);
         }
-        //holder.data.setText(post.getYear());
-
-        /*
-        final ImageButton important = holder.importantButton;
-        important.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                important.setColorFilter(Color.RED);
-            }
-        });
-        */
     }
 
 

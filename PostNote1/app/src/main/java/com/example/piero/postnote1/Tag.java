@@ -2,9 +2,6 @@ package com.example.piero.postnote1;
 
 import android.graphics.drawable.Icon;
 
-/**
- * Created by Adriano on 18/05/2016.
- */
 public class Tag {
 
     private String nome;

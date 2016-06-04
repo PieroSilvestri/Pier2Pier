@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by clemente on 22/05/16.
- */
 public class ArrayAdapterWithIcon extends ArrayAdapter<String> {
 
     private List<Integer> images;
@@ -35,7 +32,6 @@ public class ArrayAdapterWithIcon extends ArrayAdapter<String> {
             }
         }};
 
-        // recycle the array
         imgs.recycle();
     }
     @Override

@@ -91,8 +91,6 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "Errore. Problema di connessione", Toast.LENGTH_SHORT).show();
             }
         });
-        //String miaRoba = backgroundWorker.returnRes();
-        //Toast.makeText(this, miaRoba, Toast.LENGTH_SHORT).show();
     }
 
     public void OpenReg() {

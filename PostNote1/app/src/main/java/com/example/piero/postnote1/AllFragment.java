@@ -82,15 +82,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
 
     private static final String TAG = "RecyclerViewFragment";
 
-    /*public void onPrepareOptionsMenu(Menu menu) {
-        MenuInflater inflater = new MenuInflater(getActivity().getApplicationContext());
-
-        menu.clear();
-
-        super.onPrepareOptionsMenu(menu);
-        inflater.inflate(R.menu.main, menu);
-    }*/
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -101,25 +92,18 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-        //super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
- //        Bundle bundle = data.getExtras();
         if(resultCode == -1){
-            //PostItem post = (PostItem)bundle.getSerializable("POST");
-            //int id = bundle.getInt("ID");
-            //Log.d("MAIN" , " " +id );
             Log.d("PRIMA ", allList.toString());
-            //addToList(post, id);
             Log.d("Dopo ", allList.toString());
-            //Log.d("MAIN", " " + id);
+
             UpdateList();
         }
         if(resultCode == 99){
-            //deleteElement(bundle.getInt("ID"));
             UpdateList();
         }
 
@@ -174,11 +158,9 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
-        //mLayoutManager.scrollToPosition(allList.size()-1);
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(25));
         recyclerView.setAdapter(mAdapter);
 
@@ -194,7 +176,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                 bundle.putSerializable("MyPost", item);
                 bundle.putInt("ID", allList.get(position).getId());
                 bundle.putInt("AUDIO", allList.get(position).getAudio());
-                //startActivity(i.putExtras(bundle));
                 startActivityForResult(i.putExtras(bundle), 10);
             }
 
@@ -239,8 +220,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                 final int position = viewHolder.getAdapterPosition();
 
                 if (direction == ItemTouchHelper.LEFT){
-                    //myID = String.valueOf(filteredModelList.get(position).getId());
-                    //DeleteData(myID);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setCancelable(true);
@@ -248,13 +227,6 @@ public class AllFragment extends Fragment implements SearchView.OnQueryTextListe
                     builder.setMessage("Sicuro di voler cancellare la nota?");
                     builder.setPositiveButton("Sì", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
-//                            PostItem removePost = allList.get(position);
-//                            allList.remove(allList.indexOf(removePost));
-//                            DeleteData(String.valueOf(removePost.getId()));
-//                            Log.d("ANOTHER ONE", "" + removePost.getTitolo());
-//                            filteredModelList = allList;
-//                            UpdateList();
 
                             PostItem removePost = allList.get(position);
                             allList.remove(allList.indexOf(removePost));
