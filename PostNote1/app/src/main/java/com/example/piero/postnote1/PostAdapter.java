@@ -3,6 +3,7 @@ package com.example.piero.postnote1;
 import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +25,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         public RelativeLayout postItemRL;
         public TextView titolo, testo, id;
         public ImageView audio, immagine;
-        public ImageButton importantButton;
+        public ImageView importantButton;
 
         public MyViewHolder(View view) {
             super(view);
             titolo = (TextView) view.findViewById(R.id.title);
             testo = (TextView) view.findViewById(R.id.testo);
             audio = (ImageView) view.findViewById(R.id.audioIcon);
-            immagine = (ImageView) view.findViewById(R.id.iconaFoto);
-            postItemRL = (RelativeLayout) view.findViewById(R.id.postItemsRL);
-            importantButton = (ImageButton) view.findViewById(R.id.importantButton);
-            id = (TextView) view.findViewById(R.id.ID);
+            immagine = (ImageView) view.findViewById(R.id.imageCardView);
+//            postItemRL = (RelativeLayout) view.findViewById(R.id.postItemsRL);
+            importantButton = (ImageView) view.findViewById(R.id.importantButton);
+     //       id = (TextView) view.findViewById(R.id.ID);
 
         }
 
@@ -45,15 +46,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     }
 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_list_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_list_card, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         PostItem post = postList.get(position);
-        holder.titolo.setText(post.getTitolo());
-        holder.testo.setText("" + post.getTesto());
+        if (post.getTitolo().equals("")){
+            holder.titolo.setText("Nessun titolo");
+        } else {
+            holder.titolo.setText(post.getTitolo());
+        }
+
+        if (post.getTesto().equals("")) {
+            holder.testo.setText("Nessun Contenuto");
+        } else {
+            holder.testo.setText(post.getTesto());
+        }
+
+        if(post.getImmagine()==1){
+
+        } else {
+
+        }
         if(post.isFlagged() == 1){
             holder.importantButton.setImageResource(R.drawable.ic_star);
             holder.importantButton.setColorFilter(Color.RED);

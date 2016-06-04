@@ -10,8 +10,8 @@
 
     <item>
         <shape>
-            <solid android:color="@color/postItem" />
-            <corners android:radius="10dp" />
+            <!--solid android:color="@color/postItem" />
+            <corners android:radius="10dp" /-->
         </shape>
     </item>
 </layer-list>
